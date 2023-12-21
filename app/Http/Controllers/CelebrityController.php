@@ -5,62 +5,76 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCelebrityRequest;
 use App\Http\Requests\UpdateCelebrityRequest;
 use App\Models\Celebrity;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class CelebrityController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
+        return view('celebrities.index', [
+            'celebrities' => Celebrity::all()
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new celebrity.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('celebrities.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCelebrityRequest $request)
+    public function store(StoreCelebrityRequest $request): RedirectResponse
     {
-        //
+        Celebrity::create($request->all());
+        return redirect()->route('celebrities.index')
+            ->with('success', 'Nouvelle célébrité ajoutée');
     }
 
     /**
-     * Display the specified resource.
+     * Display a single celebrity.
      */
-    public function show(Celebrity $celebrity)
+    public function show(Celebrity $celebrity): View
     {
-        //
+        return view('celebrities.show', [
+            'celebrity' => $celebrity
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Displays the form to edit the celebrity
      */
-    public function edit(Celebrity $celebrity)
+    public function edit(Celebrity $celebrity): View
     {
-        //
+        return view('celebrities.edit', [
+            'celebrity' => $celebrity
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the celebrity in storage.
      */
-    public function update(UpdateCelebrityRequest $request, Celebrity $celebrity)
+    public function update(UpdateCelebrityRequest $request, Celebrity $celebrity): RedirectResponse
     {
-        //
+        $celebrity->update($request->all());
+        return redirect()->back()
+            ->with('success', 'Profil wiki mis à jour.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the celebrity from storage.
      */
-    public function destroy(Celebrity $celebrity)
+    public function destroy(Celebrity $celebrity): RedirectResponse
     {
-        //
+        $celebrity->delete();
+        return redirect()->route('celebrities.index')
+            ->with('success', 'La célébrité n\'a plus aucune notoriété..');
     }
 }
