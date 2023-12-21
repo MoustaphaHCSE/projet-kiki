@@ -11,7 +11,7 @@ class StoreCelebrityRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StoreCelebrityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'required|string',
         ];
     }
 }
