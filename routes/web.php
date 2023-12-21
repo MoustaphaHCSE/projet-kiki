@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CelebrityController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,5 +17,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
-
-Route::resource('celebrities', \App\Http\Controllers\CelebrityController::class);
+Route::resource('celebrities', CelebrityController::class);
