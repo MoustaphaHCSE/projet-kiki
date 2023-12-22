@@ -44,9 +44,9 @@
                         <div class="mb-3 row">
                             <label for="image" class="col-md-4 col-form-label text-md-end text-start">Photo</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control @error('image') is-invalid @enderror"
+                                <input type="url" class="form-control @error('image') is-invalid @enderror"
                                        id="image"
-                                       name="image" value="{{ old('image') }}">
+                                       name="image" value="https://picsum.photos/200">
                                 @if ($errors->has('image'))
                                     <span class="text-danger">{{ $errors->first('image') }}</span>
                                 @endif

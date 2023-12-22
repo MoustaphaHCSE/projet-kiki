@@ -34,7 +34,8 @@
                         <label for="quantity"
                                class="col-md-4 col-form-label text-md-end text-start"><strong>Photo:</strong></label>
                         <div class="col-md-6" style="line-height: 35px;">
-                            {{ $celebrity->image }}
+                            <img src="{{$celebrity->image}}" alt="profile pic {{$celebrity->first_name}}"
+                                 height="175px">
                         </div>
                     </div>
 

@@ -19,6 +19,7 @@
                     <table class="table table-striped table-bordered">
                         <thead>
                         <tr>
+                            <th scope="col">n°</th>
                             <th scope="col">Nom</th>
                             <th scope="col">Prénom</th>
                             <th scope="col">Description</th>
@@ -32,7 +33,10 @@
                                 <td>{{$celebrity->last_name}}</td>
                                 <td>{{$celebrity->first_name}}</td>
                                 <td>{{$celebrity->description}}</td>
-                                <td>{{$celebrity->image}}</td>
+                                <td>
+                                    <img src="{{$celebrity->image}}" alt="profile pic {{$celebrity->first_name}}"
+                                         height="175px">
+                                </td>
                                 <td>
                                     <form action="{{ route('celebrities.destroy', $celebrity->id) }}" method="post">
                                         @csrf
