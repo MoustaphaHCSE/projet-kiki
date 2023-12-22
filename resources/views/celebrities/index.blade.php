@@ -1,7 +1,3 @@
-@php use App\Models\Celebrity; @endphp
-@php
-    $celebrities = Celebrity::all();
-@endphp
 @extends('layouts.default')
 @section('content')
     <div class="row justify-content-center mt-3">
@@ -24,6 +20,7 @@
                             <th scope="col">Prénom</th>
                             <th scope="col">Description</th>
                             <th scope="col">Photo</th>
+                            <th scope="col">Films</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -53,6 +50,11 @@
                                         </button>
                                     </form>
                                 </td>
+                                <td>
+                                    @foreach ($celebrity->movies as $movie)
+                                        <p>{{$movie->title}}</p>
+                                    @endforeach
+                                </td>
                             </tr>
                         @empty
                             <td colspan="6">
@@ -63,7 +65,6 @@
                         @endforelse
                         </tbody>
                     </table>
-                    {{--                {{ $celebrities->links() }}--}}
                 </div>
             </div>
         </div>
