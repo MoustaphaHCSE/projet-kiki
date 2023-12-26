@@ -84,5 +84,7 @@ class CelebrityController extends Controller
     public function restore(Celebrity $celebrity): RedirectResponse
     {
         $celebrity->restore();
+        return redirect()->route('celebrities.index')
+            ->with('success', 'L\'artiste a retrouvé sa célébrité..');
     }
 }
