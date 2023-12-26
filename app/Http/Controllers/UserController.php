@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
@@ -35,7 +37,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request): RedirectResponse
     {
         $input = $request->all();
-        $input['password'] = Hash::h::make($request->password);
+        $input['password'] = Hash::make($request->password);
 
         $user = User::create($input);
         $user->assignRole($request->roles);
@@ -100,24 +102,22 @@ class UserController extends Controller
         $user->syncRoles($request->roles);
 
         return redirect()->back()
-            ->with('success','User is updated successfully.');
+            ->with('success', 'User is updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-     public function destroy(User $user): RedirectResponse
-     {
-         // About if user is Super Admin or User ID belongs to Auth User
-         if ($user->hasRole('Super Admin') || $user->id == auth()->user()->id)
-         {
-             abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS');
-         }
+    public function destroy(User $user): RedirectResponse
+    {
+        // About if user is Super Admin or User ID belongs to Auth User
+        if ($user->hasRole('Super Admin') || $user->id == auth()->user()->id) {
+            abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS');
+        }
 
-         $user->syncRoles([]);
-         $user->delete();
-         return redirect()->route('users.index')
-             ->with('success','User is deleted successfully.');
-     }
+        $user->syncRoles([]);
+        $user->delete();
+        return redirect()->route('users.index')
+            ->with('success', 'User is deleted successfully.');
+    }
 }
