@@ -10,6 +10,15 @@ use Illuminate\View\View;
 
 class CelebrityController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:create-product|edit-product|delete-product', ['only' => ['index', 'show']]);
+        $this->middleware('permission:create-product', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit-product', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete-product', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -80,11 +89,12 @@ class CelebrityController extends Controller
 
     /**
      * Restores the celebrity that's been soft-deleted.
+     * Unused
      */
-    public function restore(Celebrity $celebrity): RedirectResponse
-    {
-        $celebrity->restore();
-        return redirect()->route('celebrities.index')
-            ->with('success', 'L\'artiste a retrouvé sa célébrité..');
-    }
+//    public function restore(Celebrity $celebrity): RedirectResponse
+//    {
+//        $celebrity->restore();
+//        return redirect()->route('celebrities.index')
+//            ->with('success', 'L\'artiste a retrouvé sa célébrité..');
+//    }
 }
