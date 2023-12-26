@@ -21,14 +21,6 @@ class CelebrityController extends Controller
     }
 
     /**
-     * Show the form for creating a new celebrity.
-     */
-    public function create(): View
-    {
-        return view('celebrities.create');
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreCelebrityRequest $request): RedirectResponse
@@ -36,6 +28,14 @@ class CelebrityController extends Controller
         Celebrity::create($request->all());
         return redirect()->route('celebrities.index')
             ->with('success', 'Nouvelle célébrité ajoutée');
+    }
+
+    /**
+     * Show the form for creating a new celebrity.
+     */
+    public function create(): View
+    {
+        return view('celebrities.create');
     }
 
     /**
@@ -76,5 +76,13 @@ class CelebrityController extends Controller
         $celebrity->delete();
         return redirect()->route('celebrities.index')
             ->with('success', 'La célébrité n\'a plus aucune notoriété..');
+    }
+
+    /**
+     * Restores the celebrity that's been soft-deleted.
+     */
+    public function restore(Celebrity $celebrity): RedirectResponse
+    {
+        $celebrity->restore();
     }
 }
