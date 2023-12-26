@@ -1,17 +1,17 @@
 @extends('layouts.default')
 @section('content')
     <div class="card">
-        <div class="card-header">Manage Roles</div>
+        <div class="card-header">Gérer les roles</div>
         <div class="card-body">
             @can('create-role')
                 <a href="{{ route('roles.create') }}" class="btn btn-success btn-sm my-2"><i
-                            class="bi bi-plus-circle"></i> Add New Role</a>
+                            class="bi bi-plus-circle"></i> Ajouter New Role</a>
             @endcan
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
                     <th scope="col">S#</th>
-                    <th scope="col">Name</th>
+                    <th scope="col">Nom</th>
                     <th scope="col" style="width: 250px;">Action</th>
                 </tr>
                 </thead>

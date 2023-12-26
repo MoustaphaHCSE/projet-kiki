@@ -11,7 +11,7 @@
                         Edit Role
                     </div>
                     <div class="float-end">
-                        <a href="{{ route('roles.index') }}" class="btn btn-primary btn-sm">&larr; Back</a>
+                        <a href="{{ route('roles.index') }}" class="btn btn-primary btn-sm">&larr; retour</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -20,7 +20,7 @@
                         @method("PUT")
 
                         <div class="mb-3 row">
-                            <label for="name" class="col-md-4 col-form-label text-md-end text-start">Name</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-end text-start">Nom</label>
                             <div class="col-md-6">
                                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
                                        name="name" value="{{ $role->name }}">
