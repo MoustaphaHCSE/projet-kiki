@@ -35,6 +35,11 @@
                                          height="175px">
                                 </td>
                                 <td>
+                                    @foreach ($celebrity->movies as $movie)
+                                        <p>{{$movie->title}}</p>
+                                    @endforeach
+                                </td>
+                                <td>
                                     <form action="{{ route('celebrities.destroy', $celebrity->id) }}" method="post">
                                         @csrf
                                         @method('DELETE')
@@ -50,11 +55,7 @@
                                         </button>
                                     </form>
                                 </td>
-                                <td>
-                                    @foreach ($celebrity->movies as $movie)
-                                        <p>{{$movie->title}}</p>
-                                    @endforeach
-                                </td>
+
                             </tr>
                         @empty
                             <td colspan="6">
