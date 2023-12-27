@@ -5,7 +5,7 @@
         <div class="card-body">
             @can('create-role')
                 <a href="{{ route('roles.create') }}" class="btn btn-success btn-sm my-2"><i
-                            class="bi bi-plus-circle"></i> Ajouter New Role</a>
+                            class="bi bi-plus-circle"></i> Ajouter un rôle</a>
             @endcan
             <table class="table table-striped table-bordered">
                 <thead>

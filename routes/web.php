@@ -28,9 +28,12 @@ Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::delete('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::post('/login', [AuthController::class, 'doLogin']);
 
-Route::resources([
-    'roles' => RoleController::class,
-    'users' => UserController::class,
-]);
 
-Route::resource('celebrities', CelebrityController::class)->middleware('auth');
+Route::group(['middleware' => 'auth'], function () {
+    Route::resources([
+        'roles' => RoleController::class,
+        'users' => UserController::class,
+        'celebrities' => CelebrityController::class
+    ]);
+});
+//Route::resource('celebrities', CelebrityController::class)->middleware('auth');
