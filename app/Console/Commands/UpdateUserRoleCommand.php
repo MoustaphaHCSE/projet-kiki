@@ -15,7 +15,7 @@ class UpdateUserRoleCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'user:update {id} {role}';
+    protected $signature = 'user:update {--id=} {--role=}';
 
     /**
      * The console command description.
@@ -29,8 +29,8 @@ class UpdateUserRoleCommand extends Command
      */
     public function handle()
     {
-        $id = $this->argument('id');
-        $role = $this->argument('role');
+        $id = $this->option('id');
+        $role = $this->option('role');
         $user = User::where('id', $id)->first();
         $user->syncRoles($role);
     }
