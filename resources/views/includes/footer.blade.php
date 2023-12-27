@@ -1,4 +1,4 @@
-<p class="text-center">
+<p class="text-center position-absolute bottom-0 end-50">
     copyright@mc
 </p>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"

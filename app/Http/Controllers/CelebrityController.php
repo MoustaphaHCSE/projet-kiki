@@ -10,6 +10,15 @@ use Illuminate\View\View;
 
 class CelebrityController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:create-product|edit-product|delete-product', ['only' => ['index', 'show']]);
+        $this->middleware('permission:create-product', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit-product', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete-product', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -21,14 +30,6 @@ class CelebrityController extends Controller
     }
 
     /**
-     * Show the form for creating a new celebrity.
-     */
-    public function create(): View
-    {
-        return view('celebrities.create');
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreCelebrityRequest $request): RedirectResponse
@@ -36,6 +37,14 @@ class CelebrityController extends Controller
         Celebrity::create($request->all());
         return redirect()->route('celebrities.index')
             ->with('success', 'Nouvelle célébrité ajoutée');
+    }
+
+    /**
+     * Show the form for creating a new celebrity.
+     */
+    public function create(): View
+    {
+        return view('celebrities.create');
     }
 
     /**
@@ -77,4 +86,15 @@ class CelebrityController extends Controller
         return redirect()->route('celebrities.index')
             ->with('success', 'La célébrité n\'a plus aucune notoriété..');
     }
+
+    /**
+     * Restores the celebrity that's been soft-deleted.
+     * Unused
+     */
+//    public function restore(Celebrity $celebrity): RedirectResponse
+//    {
+//        $celebrity->restore();
+//        return redirect()->route('celebrities.index')
+//            ->with('success', 'L\'artiste a retrouvé sa célébrité..');
+//    }
 }
