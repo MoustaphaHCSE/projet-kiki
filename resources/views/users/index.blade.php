@@ -12,7 +12,7 @@
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
-                    <th scope="col">S#</th>
+                    <th scope="col">#id</th>
                     <th scope="col">Nom</th>
                     <th scope="col">Email</th>
                     <th scope="col">Roles</th>
@@ -22,7 +22,7 @@
                 <tbody>
                 @forelse ($users as $user)
                     <tr>
-                        <th scope="row">{{ $loop->iteration }}</th>
+                        <th scope="row">{{ $user->id }}</th>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>
