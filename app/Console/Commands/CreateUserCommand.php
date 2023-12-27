@@ -34,6 +34,6 @@ class CreateUserCommand extends Command
             'email' => $mail . '@gmail.com',
             'password' => Hash::make('password'),
         ]);
-        $this->info('Success creating user : ' . $name);
+        $this->info(sprintf('Success creating user: %s and his email %s.', $name, $mail));
     }
 }
