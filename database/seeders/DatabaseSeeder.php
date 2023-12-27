@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             SuperAdminSeeder::class,
             UserSeeder::class,
+            MovieSeeder::class,
+            CelebritySeeder::class,
         ]);
     }
 }
