@@ -7,14 +7,26 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav gap-2">
 
                 @auth
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/celebrities">Studio</a>
+                        @canany(['create-product', 'edit-product', 'delete-product'])
+                            <a class="btn btn-warning" href="{{ route('celebrities.index') }}">
+                                <i class="bi bi-bag"></i> Studio</a>
+                        @endcanany
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/roles">Roles</a>
+                        @canany(['create-role', 'edit-role', 'delete-role'])
+                            <a class="btn btn-primary" href="{{ route('roles.index') }}">
+                                <i class="bi bi-person-fill-gear"></i> BO - Roles</a>
+                        @endcanany
+                    </li>
+                    <li class="nav-item">
+                        @canany(['create-user', 'edit-user', 'delete-user'])
+                            <a class="btn btn-success" href="{{ route('users.index') }}">
+                                <i class="bi bi-people"></i> BO - Users</a>
+                        @endcanany
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#" tabindex="-1"
