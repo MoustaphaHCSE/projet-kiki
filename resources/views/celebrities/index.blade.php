@@ -68,6 +68,7 @@
                     </table>
                 </div>
             </div>
+            {{ $celebrities->links() }}
         </div>
     </div>
 

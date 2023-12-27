@@ -11,22 +11,16 @@
 
                 @auth
                     <li class="nav-item">
-                        @canany(['create-product', 'edit-product', 'delete-product'])
-                            <a class="btn btn-warning" href="{{ route('celebrities.index') }}">
-                                <i class="bi bi-bag"></i> Studio</a>
-                        @endcanany
+                        <a class="btn btn-warning" href="{{ route('celebrities.index') }}">
+                            <i class="bi bi-bag"></i> Studio</a>
                     </li>
                     <li class="nav-item">
-                        @canany(['create-role', 'edit-role', 'delete-role'])
-                            <a class="btn btn-primary" href="{{ route('roles.index') }}">
-                                <i class="bi bi-person-fill-gear"></i> BO - Roles</a>
-                        @endcanany
+                        <a class="btn btn-primary" href="{{ route('roles.index') }}">
+                            <i class="bi bi-person-fill-gear"></i> BO - Roles</a>
                     </li>
                     <li class="nav-item">
-                        @canany(['create-user', 'edit-user', 'delete-user'])
-                            <a class="btn btn-success" href="{{ route('users.index') }}">
-                                <i class="bi bi-people"></i> BO - Users</a>
-                        @endcanany
+                        <a class="btn btn-success" href="{{ route('users.index') }}">
+                            <i class="bi bi-people"></i> BO - Users</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#" tabindex="-1"
