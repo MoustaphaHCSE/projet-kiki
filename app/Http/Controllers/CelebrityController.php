@@ -25,7 +25,7 @@ class CelebrityController extends Controller
     public function index(): View
     {
         return view('celebrities.index', [
-            'celebrities' => Celebrity::all()
+            'celebrities' => Celebrity::orderBy('id', 'DESC')->paginate(3)
         ]);
     }
 
@@ -86,15 +86,4 @@ class CelebrityController extends Controller
         return redirect()->route('celebrities.index')
             ->with('success', 'La célébrité n\'a plus aucune notoriété..');
     }
-
-    /**
-     * Restores the celebrity that's been soft-deleted.
-     * Unused
-     */
-//    public function restore(Celebrity $celebrity): RedirectResponse
-//    {
-//        $celebrity->restore();
-//        return redirect()->route('celebrities.index')
-//            ->with('success', 'L\'artiste a retrouvé sa célébrité..');
-//    }
 }
