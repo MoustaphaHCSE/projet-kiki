@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RoleSeeder::class,
             SuperAdminSeeder::class,
+            UserSeeder::class,
+            MovieSeeder::class,
+            CelebritySeeder::class,
         ]);
     }
 }

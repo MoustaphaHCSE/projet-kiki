@@ -111,12 +111,12 @@ return [
     |
     */
 
-    'faker_locale' => 'en_US',
+    'faker_locale' => 'fr_FR',
 
     /*
     |--------------------------------------------------------------------------
     | Encryption Key
-    |--------------------------------------------------------------------------
+    |-------------------------------------------------------------------------- 
     |
     | This key is used by the Illuminate encrypter service and should be set
     | to a random, 32 character string, otherwise these encrypted strings
