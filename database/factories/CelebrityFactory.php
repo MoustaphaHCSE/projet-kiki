@@ -21,7 +21,7 @@ class CelebrityFactory extends Factory
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
             'description' => $this->faker->sentences(3, true),
-            'image' => $this->faker->imageUrl(210)
+            'image' => $this->faker->imageUrl(210, 210)
         ];
     }
 }
