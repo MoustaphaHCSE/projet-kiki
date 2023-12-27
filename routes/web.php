@@ -28,12 +28,12 @@ Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::delete('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::post('/login', [AuthController::class, 'doLogin']);
 
-
-Route::group(['middleware' => 'auth'], function () {
-    Route::resources([
-        'roles' => RoleController::class,
-        'users' => UserController::class,
-        'celebrities' => CelebrityController::class
-    ]);
+Route::prefix('admin')->group(function () {
+    Route::group(['middleware' => 'auth'], function () {
+        Route::resources([
+            'roles' => RoleController::class,
+            'users' => UserController::class,
+            'celebrities' => CelebrityController::class
+        ]);
+    });
 });
-//Route::resource('celebrities', CelebrityController::class)->middleware('auth');
