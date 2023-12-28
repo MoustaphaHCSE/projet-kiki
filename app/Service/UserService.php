@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
@@ -25,6 +26,19 @@ class UserService
                 abort(403, 'A SUPER ADMIN CAN\'T UPDATE ANOTHER SUPER ADMIN');
             }
         }
+        return $user;
+    }
+
+    public function update(array $userData, User $user): User
+    {
+        if (!empty($request->password)) {
+            $userData['password'] = Hash::make($userData['password']);
+        } else {
+            $userData = Arr::except($userData, 'password');
+        }
+        $user->update($userData);
+
+        $user->syncRoles($userData['roles']);
         return $user;
     }
 }

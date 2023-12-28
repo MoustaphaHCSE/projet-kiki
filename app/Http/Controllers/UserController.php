@@ -7,7 +7,6 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Service\UserService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
 
@@ -69,7 +68,7 @@ class UserController extends Controller
     public function edit(User $user): View
     {
         (new UserService())->edit($user);
-        
+
         return view('users.edit', [
             'user' => $user,
             'roles' => Role::pluck('name')->all(),
@@ -82,17 +81,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $input = $request->all();
-
-        if (!empty($request->password)) {
-            $input['password'] = Hash::make($request->password);
-        } else {
-            $input = $request->except('password');
-        }
-
-        $user->update($input);
-
-        $user->syncRoles($request->roles);
+        (new UserService())->update($request->all(), $user);
 
         return redirect()->back()
             ->with('success', 'User is updated successfully.');
