@@ -38,7 +38,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request): RedirectResponse
     {
         (new UserService())->store($request->all());
-        
+
         return redirect()->route('users.index')
             ->with('success', 'New user is added successfully.');
     }
@@ -68,12 +68,8 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        // Check Only Super Admin can update his own Profile
-        if ($user->hasRole('Super Admin')) {
-            if ($user->id != auth()->user()->id) {
-                abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS');
-            }
-        }
+        (new UserService())->edit($user);
+        
         return view('users.edit', [
             'user' => $user,
             'roles' => Role::pluck('name')->all(),

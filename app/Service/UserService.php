@@ -16,4 +16,15 @@ class UserService
 
         return $user;
     }
+
+    public function edit(User $user): User
+    {
+        // Assure that only Super Admin can update his own Profile
+        if ($user->hasRole('Super Admin')) {
+            if ($user->id != auth()->user()->id) {
+                abort(403, 'A SUPER ADMIN CAN\'T UPDATE ANOTHER SUPER ADMIN');
+            }
+        }
+        return $user;
+    }
 }
