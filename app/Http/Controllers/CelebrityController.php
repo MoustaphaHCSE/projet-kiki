@@ -6,7 +6,6 @@ use App\Http\Requests\StoreCelebrityRequest;
 use App\Http\Requests\UpdateCelebrityRequest;
 use App\Models\Celebrity;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class CelebrityController extends Controller
@@ -63,7 +62,6 @@ class CelebrityController extends Controller
      */
     public function edit(Celebrity $celebrity): View
     {
-        dd(Auth::user()->can('delete', $celebrity));
         return view('celebrities.edit', [
             'celebrity' => $celebrity
         ]);
