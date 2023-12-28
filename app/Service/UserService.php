@@ -41,4 +41,15 @@ class UserService
         $user->syncRoles($userData['roles']);
         return $user;
     }
+
+    public function destroy(User $user): User
+    {
+        // Check if user is Super Admin or User ID belongs to Auth User
+        if ($user->hasRole('Super Admin') || $user->id == auth()->user()->id) {
+            abort(403, 'CAN\'T DELETE THIS USER (it\'s either you or an admin');
+        }
+        $user->syncRoles([]);
+        $user->delete();
+        return $user;
+    }
 }
