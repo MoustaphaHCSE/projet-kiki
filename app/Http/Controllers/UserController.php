@@ -12,8 +12,10 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function __construct()
+    public function __construct(UserService $userService)
     {
+        $this->userService = $userService;
+
         $this->middleware('auth');
         $this->middleware('permission:create-user|edit-user|delete-user', ['only' => ['index', 'show']]);
         $this->middleware('permission:create-user', ['only' => ['create', 'store']]);
@@ -34,9 +36,9 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request, UserService $userService): RedirectResponse
+    public function store(StoreUserRequest $request): RedirectResponse
     {
-        $userService->store($request->all());
+        $this->userService->store($request->all());
 
         return redirect()->route('users.index')
             ->with('success', 'New user is added successfully.');
@@ -65,9 +67,9 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user, UserService $userService): View
+    public function edit(User $user): View
     {
-        $userService->edit($user);
+        $this->userService->edit($user);
 
         return view('users.edit', [
             'user' => $user,
@@ -79,9 +81,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user, UserService $userService): RedirectResponse
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $userService->update($request->all(), $user);
+        $this->userService->update($request->all(), $user);
 
         return redirect()->back()
             ->with('success', 'User is updated successfully.');
@@ -90,9 +92,9 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user, UserService $userService): RedirectResponse
+    public function destroy(User $user): RedirectResponse
     {
-        $userService->destroy($user);
+        $this->userService->destroy($user);
 
         return redirect()->route('users.index')
             ->with('success', 'User is deleted successfully.');
