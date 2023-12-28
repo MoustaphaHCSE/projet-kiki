@@ -34,9 +34,9 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request): RedirectResponse
+    public function store(StoreUserRequest $request, UserService $userService): RedirectResponse
     {
-        (new UserService())->store($request->all());
+        $userService->store($request->all());
 
         return redirect()->route('users.index')
             ->with('success', 'New user is added successfully.');
@@ -65,9 +65,9 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user): View
+    public function edit(User $user, UserService $userService): View
     {
-        (new UserService())->edit($user);
+        $userService->edit($user);
 
         return view('users.edit', [
             'user' => $user,
@@ -79,9 +79,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user): RedirectResponse
+    public function update(UpdateUserRequest $request, User $user, UserService $userService): RedirectResponse
     {
-        (new UserService())->update($request->all(), $user);
+        $userService->update($request->all(), $user);
 
         return redirect()->back()
             ->with('success', 'User is updated successfully.');
@@ -90,9 +90,9 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user): RedirectResponse
+    public function destroy(User $user, UserService $userService): RedirectResponse
     {
-        (new UserService())->destroy($user);
+        $userService->destroy($user);
 
         return redirect()->route('users.index')
             ->with('success', 'User is deleted successfully.');
