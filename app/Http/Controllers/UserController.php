@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Service\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
@@ -36,12 +37,8 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $input = $request->all();
-        $input['password'] = Hash::make($request->password);
-
-        $user = User::create($input);
-        $user->assignRole($request->roles);
-
+        (new UserService())->store($request->all());
+        
         return redirect()->route('users.index')
             ->with('success', 'New user is added successfully.');
     }
