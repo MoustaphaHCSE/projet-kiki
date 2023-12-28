@@ -12,6 +12,9 @@ class AuthController extends Controller
     //
     public function login(): View
     {
+        if (Auth::user()) {
+            return view('404');
+        }
         return view('auth.login');
     }
 
@@ -21,7 +24,7 @@ class AuthController extends Controller
         $credentials = $request->validated();
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-//            intended : initial route where the user came from before loggin in
+            // intended : initial route where the user came from before loggin in
             return redirect()->intended(route('celebrities.index'));
         }
 

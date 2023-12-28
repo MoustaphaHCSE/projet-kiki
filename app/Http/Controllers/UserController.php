@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Service\UserService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function __construct()
+    public function __construct(private readonly UserService $userService)
     {
         $this->middleware('auth');
         $this->middleware('permission:create-user|edit-user|delete-user', ['only' => ['index', 'show']]);
@@ -36,11 +36,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $input = $request->all();
-        $input['password'] = Hash::make($request->password);
-
-        $user = User::create($input);
-        $user->assignRole($request->roles);
+        $this->userService->store($request->all());
 
         return redirect()->route('users.index')
             ->with('success', 'New user is added successfully.');
@@ -71,12 +67,8 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        // Check Only Super Admin can update his own Profile
-        if ($user->hasRole('Super Admin')) {
-            if ($user->id != auth()->user()->id) {
-                abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS');
-            }
-        }
+        $this->userService->edit($user);
+
         return view('users.edit', [
             'user' => $user,
             'roles' => Role::pluck('name')->all(),
@@ -89,17 +81,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $input = $request->all();
-
-        if (!empty($request->password)) {
-            $input['password'] = Hash::make($request->password);
-        } else {
-            $input = $request->except('password');
-        }
-
-        $user->update($input);
-
-        $user->syncRoles($request->roles);
+        $this->userService->update($request->all(), $user);
 
         return redirect()->back()
             ->with('success', 'User is updated successfully.');
@@ -110,13 +92,8 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
-        // About if user is Super Admin or User ID belongs to Auth User
-        if ($user->hasRole('Super Admin') || $user->id == auth()->user()->id) {
-            abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS');
-        }
+        $this->userService->destroy($user);
 
-        $user->syncRoles([]);
-        $user->delete();
         return redirect()->route('users.index')
             ->with('success', 'User is deleted successfully.');
     }
