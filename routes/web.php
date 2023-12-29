@@ -5,6 +5,7 @@ use App\Http\Controllers\CelebrityController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    Log::channel('crudlog')->info('API endpoint test', [
+        'user_id' => 1
+    ]);
     return view('index');
 });
 
