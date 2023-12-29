@@ -13,10 +13,10 @@
                 @csrf
                 <button class="btn btn-sm btn-dark my-2 ">Voir PDF</button>
             </form>
-            {{--            <form action="{{route('download-pdf')}} " method="post">--}}
-            {{--                @csrf--}}
-            {{--                <button class="btn btn-sm btn-info my-2 ">Télécharger PDF</button>--}}
-            {{--            </form>--}}
+            <form action="{{route('download-pdf')}} " method="post" target="_blank">
+                @csrf
+                <button type="submit" class="btn btn-sm btn-info my-2 ">Télécharger PDF</button>
+            </form>
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
