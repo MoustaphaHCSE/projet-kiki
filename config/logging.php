@@ -127,10 +127,21 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
-        'crudlog' => [
+        'user-crud' => [
             'driver' => 'single',
-//            'tap' => [CrudLogFormatter::class],
-            'path' => storage_path('logs/crud.log'),
+            'path' => storage_path('logs/user-crud.log'),
+            'level' => 'debug',
+        ],
+
+        'celebrity-crud' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/celebrity-crud.log'),
+            'level' => 'debug',
+        ],
+
+        'role-crud' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/role-crud.log'),
             'level' => 'debug',
         ],
     ],
