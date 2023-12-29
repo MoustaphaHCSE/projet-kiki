@@ -105,7 +105,6 @@ class UserController extends Controller
     public function destroy(User $user): RedirectResponse
     {
         $this->userService->destroy($user);
-
         Log::channel('user-crud')->info(sprintf('Delete user: %s', $user->id));
 
         return redirect()->route('users.index')
