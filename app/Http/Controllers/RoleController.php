@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateRoleRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -26,6 +27,8 @@ class RoleController extends Controller
      */
     public function index(): View
     {
+        Log::channel('role-crud')->info('displaying all roles');
+
         return view('roles.index', [
             'roles' => Role::orderBy('id', 'DESC')->paginate(3)
         ]);
@@ -42,6 +45,8 @@ class RoleController extends Controller
 
         $role->syncPermissions($permissions);
 
+        Log::channel('role-crud')->info('adding roles');
+
         return redirect()->route('roles.index')
             ->with('success', 'Nouveau rôle ajouté.');
     }
@@ -51,6 +56,8 @@ class RoleController extends Controller
      */
     public function create(): View
     {
+        Log::channel('role-crud')->info('creating a role');
+
         return view('roles.create', [
             'permissions' => Permission::get()
         ]);
@@ -65,6 +72,9 @@ class RoleController extends Controller
             ->where("role_id", $role->id)
             ->select('name')
             ->get();
+
+        Log::channel('role-crud')->info(sprintf('displaying role %s', $role->name));
+
         return view('roles.show', [
             'role' => $role,
             'rolePermissions' => $rolePermissions
@@ -83,6 +93,8 @@ class RoleController extends Controller
         $rolePermissions = DB::table("role_has_permissions")->where("role_id", $role->id)
             ->pluck('permission_id')
             ->all();
+
+        Log::channel('role-crud')->info(sprintf('editing role %s', $role->name));
 
         return view('roles.edit', [
             'role' => $role,
@@ -104,6 +116,8 @@ class RoleController extends Controller
 
         $role->syncPermissions($permissions);
 
+        Log::channel('role-crud')->info(sprintf('updating role %s', $role->name));
+
         return redirect()->back()
             ->with('success', 'Role is updated successfully.');
     }
@@ -120,6 +134,9 @@ class RoleController extends Controller
             abort(403, 'CAN NOT DELETE SELF ASSIGNED ROLE');
         }
         $role->delete();
+
+        Log::channel('role-crud')->info(sprintf('Deleting the %s role', $role->name));
+
         return redirect()->route('roles.index')
             ->with('success', 'Role is deleted successfully.');
     }
