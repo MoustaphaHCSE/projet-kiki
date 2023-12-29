@@ -132,7 +132,7 @@ class UserController extends Controller
 
     public function exportCSV(): BinaryFileResponse
     {
-        return Excel::download(new UsersExport, 'users-list.xlsx');
+        return Excel::download(new UsersExport, 'users-list.xlsx', \Maatwebsite\Excel\Excel::XLSX);
 //        return Excel::download(new UsersDataExport, 'users-data.xlsx');
     }
 }
