@@ -21,8 +21,8 @@ class UsersDataExport implements FromView, ShouldAutoSize
 
     public function view(): View
     {
-        return (view('users.index', [
-            'users' => User::latest('id')->paginate(20)
+        dd(view('users.index', [
+            'users' => $this->users
         ]));
     }
 }
