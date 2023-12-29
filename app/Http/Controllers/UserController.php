@@ -6,6 +6,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Service\UserService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
@@ -105,5 +106,12 @@ class UserController extends Controller
         Log::channel('user-crud')->info(sprintf('Delete user: %s', $user->id));
         return redirect()->route('users.index')
             ->with('success', 'User is deleted successfully.');
+    }
+
+    public function viewPDF()
+    {
+        $pdf = Pdf::loadHTML('<h1>Hello exported to pdf</h1>');
+
+        return $pdf->stream();
     }
 }
