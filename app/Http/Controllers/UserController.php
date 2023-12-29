@@ -52,7 +52,6 @@ class UserController extends Controller
     public function create(): View
     {
         Log::channel('user-crud')->info('Creating a User');
-
         return view('users.create', [
             'roles' => Role::pluck('name')->all()
         ]);
@@ -64,7 +63,6 @@ class UserController extends Controller
     public function show(User $user): View
     {
         Log::channel('user-crud')->info(sprintf('Showing user: %s \'s profile', $user->id));
-
         return view('users.show', [
             'user' => $user
         ]);
@@ -78,7 +76,6 @@ class UserController extends Controller
         $this->userService->edit($user);
 
         Log::channel('user-crud')->info(sprintf('User: %s\'s profile is being edited', $user->id));
-
         return view('users.edit', [
             'user' => $user,
             'roles' => Role::pluck('name')->all(),
@@ -94,7 +91,6 @@ class UserController extends Controller
         $this->userService->update($request->all(), $user);
 
         Log::channel('user-crud')->info(sprintf('Update on user: %s', $user->id));
-
         return redirect()->back()
             ->with('success', 'User is updated successfully.');
     }
@@ -106,7 +102,6 @@ class UserController extends Controller
     {
         $this->userService->destroy($user);
         Log::channel('user-crud')->info(sprintf('Delete user: %s', $user->id));
-
         return redirect()->route('users.index')
             ->with('success', 'User is deleted successfully.');
     }
