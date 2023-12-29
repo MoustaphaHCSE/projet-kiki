@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\UsersDataExport;
+use App\Exports\UsersExport;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
@@ -132,6 +132,7 @@ class UserController extends Controller
 
     public function exportCSV(): BinaryFileResponse
     {
-        return Excel::download(new UsersDataExport, 'users-data.xlsx');
+        return Excel::download(new UsersExport, 'users-list.xlsx');
+//        return Excel::download(new UsersDataExport, 'users-data.xlsx');
     }
 }
