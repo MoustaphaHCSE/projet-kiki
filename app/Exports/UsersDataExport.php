@@ -21,8 +21,8 @@ class UsersDataExport implements FromView, ShouldAutoSize
 
     public function view(): View
     {
-        dd(view('users.index', [
+        return view('users.index', [
             'users' => $this->users
-        ]));
+        ]);
     }
 }
