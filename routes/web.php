@@ -37,3 +37,6 @@ Route::prefix('admin')->group(function () {
         ]);
     });
 });
+
+Route::post('users/view-pdf', [UserController::class, 'viewPDF'])->name('view-pdf');
+Route::post('users/download-pdf', [UserController::class, 'downloadPDF'])->name('download-pdf');
