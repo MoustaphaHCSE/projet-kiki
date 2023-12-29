@@ -1,6 +1,5 @@
 <?php
 
-use App\Logging\CrudLogFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -130,7 +129,7 @@ return [
 
         'crudlog' => [
             'driver' => 'single',
-            'tap' => [CrudLogFormatter::class],
+//            'tap' => [CrudLogFormatter::class],
             'path' => storage_path('logs/crud.log'),
             'level' => 'debug',
         ],

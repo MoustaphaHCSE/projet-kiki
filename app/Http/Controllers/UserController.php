@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Service\UserService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
 
@@ -57,6 +58,8 @@ class UserController extends Controller
      */
     public function show(User $user): View
     {
+        Log::channel('crudlog')->info('Showing user:{id} \'s profile', ['id' => $user->id]);
+        
         return view('users.show', [
             'user' => $user
         ]);
