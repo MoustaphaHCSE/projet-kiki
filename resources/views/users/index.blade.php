@@ -9,7 +9,7 @@
                 <a href="{{ route('users.create') }}" class="btn btn-success btn-sm my-2"><i
                             class="bi bi-plus-circle"></i> Ajouter un utilisateur</a>
             @endcan
-            <form action="{{route('view-pdf')}} " method="post">
+            <form action="{{route('view-pdf')}} " method="post" target="_blank">
                 @csrf
                 <button class="btn btn-sm btn-dark my-2 ">Voir PDF</button>
             </form>

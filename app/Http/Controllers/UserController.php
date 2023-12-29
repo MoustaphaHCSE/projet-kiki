@@ -110,7 +110,8 @@ class UserController extends Controller
 
     public function viewPDF()
     {
-        $pdf = Pdf::loadHTML('<h1>Hello exported to pdf</h1>');
+        $users = User::latest('id')->paginate(20);
+        $pdf = Pdf::loadView('users.index', array('users' => $users));
 
         return $pdf->stream();
     }
