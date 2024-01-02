@@ -5,22 +5,25 @@
     <div class="card">
         <div class="card-header">Panneau Admin - utilisateurs</div>
         <div class="card-body">
-            @can('create-user')
-                <a href="{{ route('users.create') }}" class="btn btn-success btn-sm my-2"><i
-                            class="bi bi-plus-circle"></i> Ajouter un utilisateur</a>
-            @endcan
-            <form action="{{route('view-pdf')}} " method="post" target="_blank">
-                @csrf
-                <button class="btn btn-sm btn-dark my-2 ">Voir PDF</button>
-            </form>
-            <form action="{{route('download-pdf')}} " method="post" target="_blank">
-                @csrf
-                <button type="submit" class="btn btn-sm btn-dark my-2 ">Télécharger PDF</button>
-            </form>
-            <form action="{{route('export-csv')}} " method="post" target="_blank">
-                @csrf
-                <button type="submit" class="btn btn-sm btn-info my-2 ">Export CSV</button>
-            </form>
+            <div class="btn-group gap-3" role="group">
+                @can('create-user')
+                    <a href="{{ route('users.create') }}" class="btn btn-success"><i
+                                class="bi bi-plus-circle"></i> Ajouter un utilisateur</a>
+                @endcan
+                <form action="{{route('view-pdf')}} " method="post" target="_blank">
+                    @csrf
+                    <button class="btn btn-dark ">Voir PDF</button>
+                </form>
+                <form action="{{route('download-pdf')}} " method="post" target="_blank">
+                    @csrf
+                    <button type="submit" class="btn btn-dark ">Télécharger PDF</button>
+                </form>
+                <form action="{{route('export-csv')}} " method="post" target="_blank">
+                    @csrf
+                    <button type="submit" class="btn btn-info ">Export CSV</button>
+                </form>
+            </div>
+
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>

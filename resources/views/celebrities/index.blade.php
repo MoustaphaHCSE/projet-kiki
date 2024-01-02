@@ -10,23 +10,23 @@
             <div class="card">
                 <div class="card-header">Liste des célébrités</div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm">
-                                    <a href="{{ route('celebrities.create') }}" class="btn btn-success btn-sm my-2"><i
-                                                class="bi bi-plus-circle"></i> Ajouter nouvelle célébrité</a>
-                                </div>
-                                <div class="col-sm">
-                                    <form action="{{route('export-celebrities-csv')}} " method="post" target="_blank">
-                                        @csrf
-                                        <button type="submit" class="btn btn-sm btn-info my-2 ">Export CSV</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
 
+                    <div class="btn-group gap-3">
+                        <a href="{{ route('celebrities.create') }}" class="btn btn-success"><i
+                                    class="bi bi-plus-circle"></i> Ajouter nouvelle célébrité</a>
+                        <form action="{{route('export-celebrities-csv')}} " method="post" target="_blank">
+                            @csrf
+                            <button type="submit" class="btn btn-info">Export CSV</button>
+                        </form>
                     </div>
+
+                    <div class="flex-row">
+
+                        <div class="col-sm">
+
+                        </div>
+                    </div>
+
                     <table class="table table-striped table-bordered">
                         <thead>
                         <tr>
