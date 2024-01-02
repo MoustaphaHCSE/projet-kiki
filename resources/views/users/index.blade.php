@@ -15,7 +15,11 @@
             </form>
             <form action="{{route('download-pdf')}} " method="post" target="_blank">
                 @csrf
-                <button type="submit" class="btn btn-sm btn-info my-2 ">Télécharger PDF</button>
+                <button type="submit" class="btn btn-sm btn-dark my-2 ">Télécharger PDF</button>
+            </form>
+            <form action="{{route('export-csv')}} " method="post" target="_blank">
+                @csrf
+                <button type="submit" class="btn btn-sm btn-info my-2 ">Export CSV</button>
             </form>
             <table class="table table-striped table-bordered">
                 <thead>
