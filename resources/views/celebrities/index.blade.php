@@ -18,7 +18,7 @@
                                                 class="bi bi-plus-circle"></i> Ajouter nouvelle célébrité</a>
                                 </div>
                                 <div class="col-sm">
-                                    <form action="{{route('export-csv')}} " method="post" target="_blank">
+                                    <form action="{{route('export-celebrities-csv')}} " method="post" target="_blank">
                                         @csrf
                                         <button type="submit" class="btn btn-sm btn-info my-2 ">Export CSV</button>
                                     </form>

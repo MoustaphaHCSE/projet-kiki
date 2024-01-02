@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\UsersExport;
+use App\Exports\CelebritiesExport;
 use App\Http\Requests\StoreCelebrityRequest;
 use App\Http\Requests\UpdateCelebrityRequest;
 use App\Models\Celebrity;
@@ -92,7 +92,6 @@ class CelebrityController extends Controller
 
     public function exportCSV(): BinaryFileResponse
     {
-        return Excel::download(new UsersExport, 'users-list.xlsx', \Maatwebsite\Excel\Excel::XLSX);
-//        return Excel::download(new UsersDataExport, 'users-data.xlsx');
+        return Excel::download(new CelebritiesExport, 'celebrities-list.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 }
