@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Service\UserService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserController extends Controller
 {
@@ -105,5 +110,29 @@ class UserController extends Controller
         Log::channel('user-crud')->info(sprintf('Delete user: %s', $user->id));
         return redirect()->route('users.index')
             ->with('success', 'User is deleted successfully.');
+    }
+
+    public function viewPDF()
+    {
+        $users = User::latest('id')->paginate(20);
+        $pdf = Pdf::loadView('users.index', array('users' => $users))
+            ->setPaper('a4');
+
+        return $pdf->stream();
+    }
+
+    public function downloadPDF(): Response
+    {
+        $users = User::latest('id')->paginate(20);
+        $pdf = Pdf::loadView('users.index', array('users' => $users))
+            ->setPaper('a4');
+
+        return $pdf->download('users-export.pdf');
+    }
+
+    public function exportCSV(): BinaryFileResponse
+    {
+        return Excel::download(new UsersExport, 'users-list.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+//        return Excel::download(new UsersDataExport, 'users-data.xlsx');
     }
 }

@@ -37,3 +37,10 @@ Route::prefix('admin')->group(function () {
         ]);
     });
 });
+
+// EXPORT PDF
+Route::post('users/view-pdf', [UserController::class, 'viewPDF'])->name('view-pdf');
+Route::post('users/download-pdf', [UserController::class, 'downloadPDF'])->name('download-pdf');
+
+// EXPORT EXCEL
+Route::post('users/export-csv', [UserController::class, 'exportCSV'])->name('export-csv');

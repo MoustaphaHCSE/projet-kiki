@@ -9,6 +9,18 @@
                 <a href="{{ route('users.create') }}" class="btn btn-success btn-sm my-2"><i
                             class="bi bi-plus-circle"></i> Ajouter un utilisateur</a>
             @endcan
+            <form action="{{route('view-pdf')}} " method="post" target="_blank">
+                @csrf
+                <button class="btn btn-sm btn-dark my-2 ">Voir PDF</button>
+            </form>
+            <form action="{{route('download-pdf')}} " method="post" target="_blank">
+                @csrf
+                <button type="submit" class="btn btn-sm btn-dark my-2 ">Télécharger PDF</button>
+            </form>
+            <form action="{{route('export-csv')}} " method="post" target="_blank">
+                @csrf
+                <button type="submit" class="btn btn-sm btn-info my-2 ">Export CSV</button>
+            </form>
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
