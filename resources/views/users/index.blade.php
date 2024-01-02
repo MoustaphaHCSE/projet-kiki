@@ -5,7 +5,7 @@
     <div class="card">
         <div class="card-header">Panneau Admin - utilisateurs</div>
         <div class="card-body">
-            <div class="btn-group gap-3" role="group">
+            <div class="btn-group mb-3 gap-3" role="group">
                 @can('create-user')
                     <a href="{{ route('users.create') }}" class="btn btn-success"><i
                                 class="bi bi-plus-circle"></i> Ajouter un utilisateur</a>
