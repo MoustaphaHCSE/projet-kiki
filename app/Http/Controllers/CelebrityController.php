@@ -6,6 +6,7 @@ use App\Exports\CelebritiesExport;
 use App\Http\Requests\StoreCelebrityRequest;
 use App\Http\Requests\UpdateCelebrityRequest;
 use App\Models\Celebrity;
+use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
@@ -37,7 +38,12 @@ class CelebrityController extends Controller
      */
     public function store(StoreCelebrityRequest $request): RedirectResponse
     {
-        Celebrity::create($request->all());
+        $data = $request->validated();
+        /** @var UploadedFile|null $image */
+        $image = $request->validated('image');
+        $data['image'] = $image->store('celebrity', 'public');
+
+        Celebrity::create($data);
         return redirect()->route('celebrities.index')
             ->with('success', 'Nouvelle célébrité ajoutée');
     }
@@ -94,4 +100,5 @@ class CelebrityController extends Controller
     {
         return Excel::download(new CelebritiesExport, 'celebrities-list.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
+
 }
