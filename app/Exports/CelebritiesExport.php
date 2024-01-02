@@ -25,7 +25,7 @@ class CelebritiesExport implements FromCollection, WithHeadings, WithStyles, Wit
         return ['id', 'prenom', 'nom', 'description', 'inscrit le'];
     }
 
-    public function styles(Worksheet $sheet)
+    public function styles(Worksheet $sheet): void
     {
         $sheet->getStyle('E')->getFont()->setBold(true);
     }
