@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
 use App\Http\Requests\StoreCelebrityRequest;
 use App\Http\Requests\UpdateCelebrityRequest;
 use App\Models\Celebrity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CelebrityController extends Controller
 {
@@ -85,5 +88,11 @@ class CelebrityController extends Controller
         $celebrity->delete();
         return redirect()->route('celebrities.index')
             ->with('success', 'La célébrité n\'a plus aucune notoriété..');
+    }
+
+    public function exportCSV(): BinaryFileResponse
+    {
+        return Excel::download(new UsersExport, 'users-list.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+//        return Excel::download(new UsersDataExport, 'users-data.xlsx');
     }
 }
