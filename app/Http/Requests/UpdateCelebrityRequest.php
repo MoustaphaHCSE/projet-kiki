@@ -18,7 +18,7 @@ class UpdateCelebrityRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -26,7 +26,7 @@ class UpdateCelebrityRequest extends FormRequest
             'first_name' => 'required|string|max:255,' . $this->celebrity->id,
             'last_name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'required|string',
+            'image' => 'nullable|image',
         ];
     }
 }

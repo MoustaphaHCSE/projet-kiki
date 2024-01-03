@@ -47,7 +47,7 @@
                                 <input type="file" class="form-control @error('image') is-invalid @enderror"
                                        id="image"
                                        name="image"
-                                       value="null">
+                                >
                                 @if ($errors->has('image'))
                                     <span class="text-danger">{{ $errors->first('image') }}</span>
                                 @endif

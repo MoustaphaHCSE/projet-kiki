@@ -1,3 +1,4 @@
+@php use Support\Facades\Storage; @endphp
 @extends('layouts.default')
 @section('content')
     <div class="row justify-content-center mt-3">

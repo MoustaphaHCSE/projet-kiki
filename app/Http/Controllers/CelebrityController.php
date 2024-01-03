@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateCelebrityRequest;
 use App\Models\Celebrity;
 use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -34,26 +35,11 @@ class CelebrityController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Gets the image url.
      */
-    public function store(StoreCelebrityRequest $request): RedirectResponse
+    public function geturl(): string
     {
-        $data = $request->validated();
-        /** @var UploadedFile|null $image */
-        $image = $request->validated('image');
-        $data['image'] = $image->store('celebrity', 'public');
-
-        Celebrity::create($data);
-        return redirect()->route('celebrities.index')
-            ->with('success', 'Nouvelle célébrité ajoutée');
-    }
-
-    /**
-     * Show the form for creating a new celebrity.
-     */
-    public function create(): View
-    {
-        return view('celebrities.create');
+        return Storage::url($this->image);
     }
 
     /**
@@ -81,9 +67,39 @@ class CelebrityController extends Controller
      */
     public function update(UpdateCelebrityRequest $request, Celebrity $celebrity): RedirectResponse
     {
-        $celebrity->update($request->all());
+        $celebrity->update($this->extractData($celebrity, $request));
+
         return redirect()->back()
             ->with('success', 'Profil wiki mis à jour.');
+    }
+
+    public function extractData(Celebrity $celebrity, StoreCelebrityRequest|UpdateCelebrityRequest $request): array
+    {
+        $data = $request->validated();
+        /** @var UploadedFile|null $image */
+        $image = $request->validated('image');
+        if ($image !== null && !$image->getError()) {
+            $data['image'] = $image->store('celebrity', 'public');
+        }
+        return $data;
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreCelebrityRequest $request, Celebrity $celebrity): RedirectResponse
+    {
+        $celebrity->create($this->extractData($celebrity, $request));
+        return redirect()->route('celebrities.index')
+            ->with('success', 'Nouvelle célébrité ajoutée');
+    }
+
+    /**
+     * Show the form for creating a new celebrity.
+     */
+    public function create(): View
+    {
+        return view('celebrities.create');
     }
 
     /**
