@@ -37,20 +37,22 @@ class CelebrityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCelebrityRequest $request): RedirectResponse
+    public function store(StoreCelebrityRequest $request, Celebrity $celebrity): RedirectResponse
     {
-        $fileName = pathinfo($request->file('image')->getClientOriginalName())['filename'];
-        $extension = $request->file('image')->guessExtension();
-        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $fileName)));
+        $requestImage = $request->file('image');
+        if ($requestImage !== null && !$requestImage->getError()) {
+            $fileName = pathinfo($request->file('image')->getClientOriginalName())['filename'];
+            $extension = $request->file('image')->guessExtension();
+            $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $fileName)));
 
-        $path = public_path('storage') . '/celebrity/' . $slug . '.' . $extension;
+            $path = sprintf('%s/celebrity/%s.%s', public_path('storage'), $slug, $extension);
 
-        $manager = new ImageManager(new Driver());
-        $image = $manager->read($request->validated('image'));
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($request->validated('image'));
 
-        $image->toJpeg()->save($path);
-        Celebrity::create($request->validated());
-        
+            $image->toJpeg()->save($path);
+        }
+        $celebrity->create($request->validated());
         return redirect()->route('celebrities.index')
             ->with('success', 'Nouvelle célébrité ajoutée');
     }
@@ -106,6 +108,16 @@ class CelebrityController extends Controller
     public function exportCSV(): BinaryFileResponse
     {
         return Excel::download(new CelebritiesExport, 'celebrities-list.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    /**
+     * @param Celebrity $celebrity
+     * @param StoreCelebrityRequest $request
+     * @return array
+     */
+    private function extractData(Celebrity $celebrity, StoreCelebrityRequest $request): void
+    {
+
     }
 
 }
