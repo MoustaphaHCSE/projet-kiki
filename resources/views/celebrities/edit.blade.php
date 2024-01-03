@@ -51,9 +51,16 @@
                         <div class="mb-3 row">
                             <label for="image" class="col-md-4 col-form-label text-md-end text-start">Photo</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control @error('image') is-invalid @enderror"
+                                <img src="{{asset('storage/' . $celebrity->image)}}"
+                                     class="img-fluid"
+                                     id="preview"
+                                >
+                                <input type="file" class="form-control @error('image') is-invalid @enderror"
+                                       name="image"
                                        id="image"
-                                       name="image" value="{{ $celebrity->image }}">
+                                       accept="image/*"
+                                       value="null">
+                                >
                                 @if ($errors->has('image'))
                                     <span class="text-danger">{{ $errors->first('image') }}</span>
                                 @endif
@@ -80,4 +87,13 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const image = document.getElementById("image");
+        const preview = document.getElementById("preview");
+        image.addEventListener('change', (e) => {
+            preview.src = (window.URL.createObjectURL(new Blob(image.files)))
+        })
+    </script>
+
 @stop
