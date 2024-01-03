@@ -6,9 +6,10 @@ use App\Exports\CelebritiesExport;
 use App\Http\Requests\StoreCelebrityRequest;
 use App\Http\Requests\UpdateCelebrityRequest;
 use App\Models\Celebrity;
-use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\ImageManager;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -38,12 +39,18 @@ class CelebrityController extends Controller
      */
     public function store(StoreCelebrityRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-        /** @var UploadedFile|null $image */
-        $image = $request->validated('image');
-        $data['image'] = $image->store('celebrity', 'public');
+        $fileName = pathinfo($request->file('image')->getClientOriginalName())['filename'];
+        $extension = $request->file('image')->guessExtension();
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $fileName)));
 
-        Celebrity::create($data);
+        $path = public_path('storage') . '/celebrity/' . $slug . '.' . $extension;
+
+        $manager = new ImageManager(new Driver());
+        $image = $manager->read($request->validated('image'));
+
+        $image->toJpeg()->save($path);
+        Celebrity::create($request->validated());
+        
         return redirect()->route('celebrities.index')
             ->with('success', 'Nouvelle célébrité ajoutée');
     }

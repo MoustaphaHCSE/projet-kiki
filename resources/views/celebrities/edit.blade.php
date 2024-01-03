@@ -56,11 +56,9 @@
                                      id="preview"
                                 >
                                 <input type="file" class="form-control @error('image') is-invalid @enderror"
-                                       name="image"
                                        id="image"
-                                       accept="image/*"
+                                       name="image"
                                        value="null">
-                                >
                                 @if ($errors->has('image'))
                                     <span class="text-danger">{{ $errors->first('image') }}</span>
                                 @endif
