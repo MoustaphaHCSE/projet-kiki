@@ -39,6 +39,12 @@ Route::prefix('admin')->group(function () {
     });
 });
 
+// USER CONTROLLER permissions
+Route::get('index', [UserController::class, 'show'])->middleware('permission:create-user|edit-user|delete-user');
+Route::post('create', [UserController::class, 'store'])->middleware('permission:create-user');
+Route::patch('edit', [UserController::class, 'update'])->middleware('permission:edit-user');
+Route::delete('destroy', [UserController::class, 'destroy'])->middleware('permission:delete-user');
+
 // EXPORT PDF
 Route::post('users/view-pdf', [UserController::class, 'viewPDF'])->name('view-pdf');
 Route::post('users/download-pdf', [UserController::class, 'downloadPDF'])->name('download-pdf');
