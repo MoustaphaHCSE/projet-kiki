@@ -26,6 +26,9 @@ use Spatie\Permission\Traits\HasRoles;
  * - Relations.
  * @property Role $role
  * @property Permission $permission
+ * - Support
+ * @method static hasRoles()
+ * @method static syncRoles()
  */
 class User extends Authenticatable
 {
