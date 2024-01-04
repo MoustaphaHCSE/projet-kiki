@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -22,7 +21,7 @@ use Illuminate\Support\Facades\Date;
  * @property Date $updated_at
  * @property Date $deleted_at used when soft-delete
  * - Relations.
- * @property Movie $movie
+ * @property Collection<int, Movie> $movies
  */
 class Celebrity extends Model
 {
