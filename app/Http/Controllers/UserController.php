@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserController extends Controller
@@ -25,7 +26,10 @@ class UserController extends Controller
      */
     public function index(): View
     {
-        return $this->userService->displayUsers();
+        $this->userService->displayUsers();
+        return view('users.index', [
+            'users' => User::latest('id')->paginate(4)
+        ]);
     }
 
     /**
@@ -33,7 +37,9 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        return $this->userService->store($request->all());
+        $this->userService->store($request->all());
+        return redirect()->route('users.index')
+            ->with('success', 'Nouvel utilisateur ajouté.');
     }
 
     /**
@@ -41,7 +47,10 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        return $this->userService->create();
+        $this->userService->create();
+        return view('users.create', [
+            'roles' => Role::pluck('name')->all()
+        ]);
     }
 
     /**
@@ -49,7 +58,10 @@ class UserController extends Controller
      */
     public function show(User $user): View
     {
-        return $this->userService->show($user);
+        $this->userService->show($user);
+        return view('users.show', [
+            'user' => $user
+        ]);
     }
 
     /**
@@ -57,7 +69,12 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        return $this->userService->edit($user);
+        $this->userService->edit($user);
+        return view('users.edit', [
+            'user' => $user,
+            'roles' => Role::pluck('name')->all(),
+            'userRoles' => $user->roles->pluck('name')->all()
+        ]);
     }
 
     /**
@@ -65,7 +82,9 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        return $this->userService->update($request->all(), $user);
+        $this->userService->update($request->all(), $user);
+        return redirect()->route('users.index')
+            ->with('success', 'User is updated successfully.');
     }
 
     /**
@@ -73,10 +92,12 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
-        return $this->userService->destroy($user);
+        $this->userService->destroy($user);
+        return redirect()->route('users.index')
+            ->with('success', 'User is deleted successfully.');
     }
 
-    public function viewPDF()
+    public function viewPDF(): Response
     {
         $users = User::latest('id')->paginate(20);
         $pdf = Pdf::loadView('users.index', array('users' => $users))
