@@ -5,13 +5,14 @@ namespace App\Service;
 use App\Actions\CreateLogAction;
 use App\Actions\HashPasswordAction;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class UserService
 {
-    public function store($data): User
+    public function store($data): RedirectResponse
     {
         $data['password'] = app()->call(HashPasswordAction::class, [
             'password' => $data['password']
@@ -22,7 +23,8 @@ class UserService
             'route' => 'user-crud',
             'message' => 'Adding a new user',
         ]);
-        return $user;
+        return redirect()->route('users.index')
+            ->with('success', 'Nouvel utilisateur ajouté.');
     }
 
 

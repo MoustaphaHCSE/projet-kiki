@@ -4,11 +4,17 @@
 
     <div class="card">
         <div class="card-header">Panneau Admin - utilisateurs</div>
+        @if ($message = Session::get('success'))
+            <div class="alert alert-success" role="alert">
+                {{$message}}
+            </div>
+        @endif
         <div class="card-body">
+
             <div class="btn-group mb-3 gap-3" role="group">
                 @can('create-user')
                     <a href="{{ route('users.create') }}" class="btn btn-success"><i
-                                class="bi bi-plus-circle"></i> Ajouter un utilisateur</a>
+                            class="bi bi-plus-circle"></i> Ajouter un utilisateur</a>
                 @endcan
                 <form action="{{route('view-pdf')}} " method="post" target="_blank">
                     @csrf
@@ -52,24 +58,24 @@
                                 @method('DELETE')
 
                                 <a href="{{ route('users.show', $user->id) }}" class="btn btn-warning btn-sm"><i
-                                            class="bi bi-eye"></i> Show</a>
+                                        class="bi bi-eye"></i> Show</a>
 
                                 @if (in_array('Super Admin', $user->getRoleNames()->toArray() ?? []) )
                                     @if (Auth::user()->hasRole('Super Admin'))
                                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm"><i
-                                                    class="bi bi-pencil-square"></i> Edit</a>
+                                                class="bi bi-pencil-square"></i> Edit</a>
                                     @endif
                                 @else
                                     @can('edit-user')
                                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm"><i
-                                                    class="bi bi-pencil-square"></i> Edit</a>
+                                                class="bi bi-pencil-square"></i> Edit</a>
                                     @endcan
 
                                     @can('delete-user')
                                         @if (Auth::user()->id!=$user->id)
                                             <button type="submit" class="btn btn-danger btn-sm"
                                                     onclick="return confirm('Do you want to delete this user?');"><i
-                                                        class="bi bi-trash"></i> Delete
+                                                    class="bi bi-trash"></i> Delete
                                             </button>
                                         @endif
                                     @endcan

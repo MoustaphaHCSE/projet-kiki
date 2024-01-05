@@ -38,10 +38,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $this->userService->store($request->all());
-
-        return redirect()->route('users.index')
-            ->with('success', 'New user is added successfully.');
+        return $this->userService->store($request->all());
     }
 
     /**
