@@ -8,10 +8,22 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class UserService
 {
+    public function displayUsers(): View
+    {
+        app()->call(CreateLogAction::class, [
+            'route' => 'user-crud',
+            'message' => 'displaying all users',
+        ]);
+        return view('users.index', [
+            'users' => User::latest('id')->paginate(4)
+        ]);
+    }
+
     public function store($data): RedirectResponse
     {
         $data['password'] = app()->call(HashPasswordAction::class, [
@@ -27,8 +39,30 @@ class UserService
             ->with('success', 'Nouvel utilisateur ajouté.');
     }
 
+    public function create(): View
+    {
+        app()->call(CreateLogAction::class, [
+            'route' => 'user-crud',
+            'message' => 'Creating a new user',
+        ]);
 
-    public function edit(User $user): User
+        return view('users.create', [
+            'roles' => Role::pluck('name')->all()
+        ]);
+    }
+
+    public function show(User $user): View
+    {
+        app()->call(CreateLogAction::class, [
+            'route' => 'user-crud',
+            'message' => sprintf('Showing user: %s \'s profile', $user->id),
+        ]);
+        return view('users.show', [
+            'user' => $user
+        ]);
+    }
+
+    public function edit(User $user): View
     {
         // Assure that only Super Admin can update his own Profile
         if ($user->hasRole('Super Admin')) {
@@ -36,10 +70,18 @@ class UserService
                 abort(403, 'A SUPER ADMIN CAN\'T UPDATE ANOTHER SUPER ADMIN');
             }
         }
-        return $user;
+        app()->call(CreateLogAction::class, [
+            'route' => 'user-crud',
+            'message' => sprintf('User: %s\'s profile is being edited', $user->id),
+        ]);
+        return view('users.edit', [
+            'user' => $user,
+            'roles' => Role::pluck('name')->all(),
+            'userRoles' => $user->roles->pluck('name')->all()
+        ]);
     }
 
-    public function update(array $userData, User $user): User
+    public function update(array $userData, User $user): RedirectResponse
     {
         if (!empty($request->password)) {
             $userData['password'] = Hash::make($userData['password']);
@@ -49,10 +91,16 @@ class UserService
         $user->update($userData);
 
         $user->syncRoles($userData['roles']);
-        return $user;
+
+        app()->call(CreateLogAction::class, [
+            'route' => 'user-crud',
+            'message' => sprintf('Update on user: %s', $user->id),
+        ]);
+        return redirect()->route('users.index')
+            ->with('success', 'User is updated successfully.');
     }
 
-    public function destroy(User $user): User
+    public function destroy(User $user): RedirectResponse
     {
         // Check if user is Super Admin or User ID belongs to Auth User
         if ($user->hasRole('Super Admin') || $user->id == auth()->user()->id) {
@@ -60,12 +108,11 @@ class UserService
         }
         $user->syncRoles([]);
         $user->delete();
-        return $user;
-    }
-
-    public function createUserLogs($message)
-//créer une action createLogs qui prend la route + le message en param et utiliser partout
-    {
-        Log::channel('user-crud')->info($message);
+        app()->call(CreateLogAction::class, [
+            'route' => 'user-crud',
+            'message' => sprintf('Delete user: %s', $user->id),
+        ]);
+        return redirect()->route('users.index')
+            ->with('success', 'User is deleted successfully.');
     }
 }

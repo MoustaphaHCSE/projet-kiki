@@ -12,7 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
-use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserController extends Controller
@@ -26,11 +25,7 @@ class UserController extends Controller
      */
     public function index(): View
     {
-        $this->userService->createUserLogs("displaying all users");
-
-        return view('users.index', [
-            'users' => User::latest('id')->paginate(3)
-        ]);
+        return $this->userService->displayUsers();
     }
 
     /**
@@ -46,11 +41,7 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        $this->userService->createUserLogs("Creating a new user");
-
-        return view('users.create', [
-            'roles' => Role::pluck('name')->all()
-        ]);
+        return $this->userService->create();
     }
 
     /**
@@ -58,11 +49,7 @@ class UserController extends Controller
      */
     public function show(User $user): View
     {
-        $this->userService->createUserLogs(sprintf('Showing user: %s \'s profile', $user->id));
-
-        return view('users.show', [
-            'user' => $user
-        ]);
+        return $this->userService->show($user);
     }
 
     /**
@@ -70,14 +57,7 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        $this->userService->edit($user);
-        $this->userService->createUserLogs(sprintf('User: %s\'s profile is being edited', $user->id));
-
-        return view('users.edit', [
-            'user' => $user,
-            'roles' => Role::pluck('name')->all(),
-            'userRoles' => $user->roles->pluck('name')->all()
-        ]);
+        return $this->userService->edit($user);
     }
 
     /**
@@ -85,11 +65,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $this->userService->update($request->all(), $user);
-        $this->userService->createUserLogs(sprintf('Update on user: %s', $user->id));
-
-        return redirect()->back()
-            ->with('success', 'User is updated successfully.');
+        return $this->userService->update($request->all(), $user);
     }
 
     /**
@@ -97,11 +73,7 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
-        $this->userService->destroy($user);
-        $this->userService->createUserLogs(sprintf('Delete user: %s', $user->id));
-
-        return redirect()->route('users.index')
-            ->with('success', 'User is deleted successfully.');
+        return $this->userService->destroy($user);
     }
 
     public function viewPDF()
