@@ -10,7 +10,6 @@ use App\Service\UserService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
@@ -27,7 +26,7 @@ class UserController extends Controller
      */
     public function index(): View
     {
-        Log::channel('user-crud')->info('displaying all users');
+        $this->userService->createUserLogs("displaying all users");
 
         return view('users.index', [
             'users' => User::latest('id')->paginate(3)
@@ -39,11 +38,8 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $this->userService->hashPassword($request->all());
-        $user = $this->userService->createUser($request->all());
-        $this->userService->assignRole($request->all(), $user);
+        $this->userService->store($request->all());
 
-        Log::channel('user-crud')->info('Adding a new user');
         return redirect()->route('users.index')
             ->with('success', 'New user is added successfully.');
     }
@@ -53,7 +49,8 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        Log::channel('user-crud')->info('Creating a User');
+        $this->userService->createUserLogs("Creating a new user");
+
         return view('users.create', [
             'roles' => Role::pluck('name')->all()
         ]);
@@ -64,7 +61,8 @@ class UserController extends Controller
      */
     public function show(User $user): View
     {
-        Log::channel('user-crud')->info(sprintf('Showing user: %s \'s profile', $user->id));
+        $this->userService->createUserLogs(sprintf('Showing user: %s \'s profile', $user->id));
+
         return view('users.show', [
             'user' => $user
         ]);
@@ -76,8 +74,8 @@ class UserController extends Controller
     public function edit(User $user): View
     {
         $this->userService->edit($user);
+        $this->userService->createUserLogs(sprintf('User: %s\'s profile is being edited', $user->id));
 
-        Log::channel('user-crud')->info(sprintf('User: %s\'s profile is being edited', $user->id));
         return view('users.edit', [
             'user' => $user,
             'roles' => Role::pluck('name')->all(),
@@ -91,8 +89,8 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
         $this->userService->update($request->all(), $user);
+        $this->userService->createUserLogs(sprintf('Update on user: %s', $user->id));
 
-        Log::channel('user-crud')->info(sprintf('Update on user: %s', $user->id));
         return redirect()->back()
             ->with('success', 'User is updated successfully.');
     }
@@ -103,8 +101,8 @@ class UserController extends Controller
     public function destroy(User $user): RedirectResponse
     {
         $this->userService->destroy($user);
+        $this->userService->createUserLogs(sprintf('Delete user: %s', $user->id));
 
-        Log::channel('user-crud')->info(sprintf('Delete user: %s', $user->id));
         return redirect()->route('users.index')
             ->with('success', 'User is deleted successfully.');
     }

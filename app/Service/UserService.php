@@ -2,27 +2,29 @@
 
 namespace App\Service;
 
+use App\Actions\CreateLogAction;
+use App\Actions\HashPasswordAction;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class UserService
 {
-
-    public function hashPassword($data): void
+    public function store($data): User
     {
-        $data['password'] = Hash::make($data['password']);
-    }
-
-    public function createUser($data): User
-    {
-        return User::create($data);
-    }
-
-    public function assignRole($data, User $user): void
-    {
+        $data['password'] = app()->call(HashPasswordAction::class, [
+            'password' => $data['password']
+        ]);
+        $user = User::create($data);
         $user->assignRole($data['roles']);
+        app()->call(CreateLogAction::class, [
+            'route' => 'user-crud',
+            'message' => 'Adding a new user',
+        ]);
+        return $user;
     }
+
 
     public function edit(User $user): User
     {
@@ -57,5 +59,11 @@ class UserService
         $user->syncRoles([]);
         $user->delete();
         return $user;
+    }
+
+    public function createUserLogs($message)
+//créer une action createLogs qui prend la route + le message en param et utiliser partout
+    {
+        Log::channel('user-crud')->info($message);
     }
 }
