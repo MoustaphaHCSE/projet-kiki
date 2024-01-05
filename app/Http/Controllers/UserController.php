@@ -39,9 +39,11 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $this->userService->store($request->all());
-        Log::channel('user-crud')->info('Adding a new user');
+        $this->userService->hashPassword($request->all());
+        $user = $this->userService->createUser($request->all());
+        $this->userService->assignRole($request->all(), $user);
 
+        Log::channel('user-crud')->info('Adding a new user');
         return redirect()->route('users.index')
             ->with('success', 'New user is added successfully.');
     }

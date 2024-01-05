@@ -9,13 +9,19 @@ use Illuminate\Support\Facades\Hash;
 class UserService
 {
 
-    public function store(array $userData): User
+    public function hashPassword($data): void
     {
-        $userData['password'] = Hash::make($userData['password']);
-        $user = User::create($userData);
-        $user->assignRole($userData['roles']);
+        $data['password'] = Hash::make($data['password']);
+    }
 
-        return $user;
+    public function createUser($data): User
+    {
+        return User::create($data);
+    }
+
+    public function assignRole($data, User $user): void
+    {
+        $user->assignRole($data['roles']);
     }
 
     public function edit(User $user): User
