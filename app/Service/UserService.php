@@ -69,11 +69,9 @@ class UserService
             $userData['password'] = app()->call(HashPasswordAction::class, [
                 'password' => $userData['password']
             ]);
-        } else {
-            $userData = Arr::except($userData, 'password');
         }
+        $userData = Arr::except($userData, 'password');
         $user->update($userData);
-
         $user->syncRoles($userData['roles']);
 
         app()->call(CreateLogAction::class, [
@@ -85,10 +83,6 @@ class UserService
 
     public function destroy(User $user): User
     {
-        // Check if user is Super Admin or User ID belongs to Auth User
-        if ($user->hasRole('Super Admin') || $user->id == auth()->user()->id) {
-            abort(403, 'CAN\'T DELETE THIS USER (it\'s either you or an admin');
-        }
         $user->syncRoles([]);
         $user->delete();
         app()->call(CreateLogAction::class, [
