@@ -39,11 +39,25 @@ Route::prefix('admin')->group(function () {
     });
 });
 
+Route::group(['middleware' => 'auth'], function () {
 // USER CONTROLLER permissions
-Route::get('index', [UserController::class, 'show'])->middleware('permission:create-user|edit-user|delete-user');
-Route::post('create', [UserController::class, 'store'])->middleware('permission:create-user');
-Route::patch('edit', [UserController::class, 'update'])->middleware('permission:edit-user');
-Route::delete('destroy', [UserController::class, 'destroy'])->middleware('permission:delete-user');
+    Route::get('index', [UserController::class, 'show'])->middleware('permission:create-user|edit-user|delete-user');
+    Route::post('create', [UserController::class, 'store'])->middleware('permission:create-user');
+    Route::patch('edit', [UserController::class, 'update'])->middleware('permission:edit-user');
+    Route::delete('destroy', [UserController::class, 'destroy'])->middleware('permission:delete-user');
+
+// CELEBRITY CONTROLLER
+    Route::get('index', [CelebrityController::class, 'show'])->middleware('permission:create-product|edit-product|delete-product');
+    Route::post('create', [CelebrityController::class, 'store'])->middleware('permission:create-product');
+    Route::patch('edit', [CelebrityController::class, 'update'])->middleware('permission:edit-product');
+    Route::delete('destroy', [CelebrityController::class, 'destroy'])->middleware('permission:delete-product');
+
+// ROLE CONTROLLER
+    Route::get('index', [RoleController::class, 'show'])->middleware('permission:create-role|edit-role|delete-role');
+    Route::post('create', [RoleController::class, 'store'])->middleware('permission:create-role');
+    Route::patch('edit', [RoleController::class, 'update'])->middleware('permission:edit-role');
+    Route::delete('destroy', [RoleController::class, 'destroy'])->middleware('permission:delete-role');
+});
 
 // EXPORT PDF
 Route::post('users/view-pdf', [UserController::class, 'viewPDF'])->name('view-pdf');
