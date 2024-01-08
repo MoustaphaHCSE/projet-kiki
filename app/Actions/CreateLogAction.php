@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 
 class CreateLogAction
 {
-    public function __invoke($route, $message)
+    public function __invoke($route, $message): void
     {
         Log::channel($route)->info($message);
     }

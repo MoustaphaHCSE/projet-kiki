@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Actions\CheckUserUpdatableAction;
 use App\Actions\CreateLogAction;
 use App\Actions\HashPasswordAction;
 use App\Models\User;
@@ -51,12 +52,10 @@ class UserService
 
     public function edit(User $user): void
     {
-        // Assure that only Super Admin can update his own Profile
-        if ($user->hasRole('Super Admin')) {
-            if ($user->id != auth()->user()->id) {
-                abort(403, 'A SUPER ADMIN CAN\'T UPDATE ANOTHER SUPER ADMIN');
-            }
-        }
+        app()->call(CheckUserUpdatableAction::class, [
+            'user' => $user,
+            'action' => "edit"
+        ]);
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
             'message' => sprintf('User: %s\'s profile is being edited', $user->id),
@@ -83,6 +82,10 @@ class UserService
 
     public function destroy(User $user): User
     {
+        app()->call(CheckUserUpdatableAction::class, [
+            'user' => $user,
+            'action' => "destroy"
+        ]);
         $user->syncRoles([]);
         $user->delete();
         app()->call(CreateLogAction::class, [
