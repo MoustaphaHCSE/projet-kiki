@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Enums\PermissionTo;
+use App\Enums\RoleEnum;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleSeeder extends Seeder
@@ -12,23 +15,26 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create(['name' => 'Super Admin']);
-        $admin = Role::create(['name' => 'Admin']);
-        $celebrityManager = Role::create(['name' => 'Celebrity Manager']);
+        $superAdmin = Role::create(['name' => RoleEnum::SUPER_ADMIN]);
+        $admin = Role::create(['name' => RoleEnum::ADMIN]);
+        $celebrityManager = Role::create(['name' => RoleEnum::CELEBRITY_MANAGER]);
+        $user = Role::create(['name' => RoleEnum::USER]);
+
+        $superAdmin->givePermissionTo(Permission::all());
 
         $admin->givePermissionTo([
-            'create-user',
-            'edit-user',
-            'delete-user',
-            'create-celebrity',
-            'edit-celebrity',
-            'delete-celebrity'
+            PermissionTo::CREATE_USER,
+            PermissionTo::EDIT_USER,
+            PermissionTo::DELETE_USER,
+            PermissionTo::CREATE_CELEBRITY,
+            PermissionTo::EDIT_CELEBRITY,
+            PermissionTo::DELETE_CELEBRITY,
         ]);
 
         $celebrityManager->givePermissionTo([
-            'create-celebrity',
-            'edit-celebrity',
-            'delete-celebrity'
+            PermissionTo::CREATE_CELEBRITY,
+            PermissionTo::EDIT_CELEBRITY,
+            PermissionTo::DELETE_CELEBRITY,
         ]);
     }
 }

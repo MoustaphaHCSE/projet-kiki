@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\RoleEnum;
 use App\Models\Celebrity;
 use App\Models\User;
 
@@ -44,7 +45,7 @@ class CelebrityPolicy
      */
     public function delete(User $user, Celebrity $celebrity): bool
     {
-        return $user->hasRole('Admin');
+        return $user->hasRole(RoleEnum::ADMIN);
     }
 
     /**
@@ -52,7 +53,7 @@ class CelebrityPolicy
      */
     public function restore(User $user, Celebrity $celebrity): bool
     {
-        return $user->hasRole('Admin');
+        return $user->hasRole(RoleEnum::ADMIN);
     }
 
     /**
@@ -60,6 +61,6 @@ class CelebrityPolicy
      */
     public function forceDelete(User $user, Celebrity $celebrity): bool
     {
-        return $user->hasRole('Admin');
+        return $user->hasRole(RoleEnum::ADMIN);
     }
 }

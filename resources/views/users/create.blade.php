@@ -68,12 +68,14 @@
                                     @forelse ($roles as $role)
 
                                         @if ($role!='Super Admin')
-                                            <option value="{{ $role }}" {{ in_array($role, old('roles') ?? []) ? 'selected' : '' }}>
+                                            <option
+                                                value="{{ $role }}" {{ in_array($role, old('roles') ?? []) ? 'selected' : '' }}>
                                                 {{ $role }}
                                             </option>
                                         @else
-                                            @if (Auth::user()->hasRole('Super Admin'))
-                                                <option value="{{ $role }}" {{ in_array($role, old('roles') ?? []) ? 'selected' : '' }}>
+                                            @if (Auth::user()->hasRole(\App\Enums\RoleEnum::SUPER_ADMIN->label()))
+                                                <option
+                                                    value="{{ $role }}" {{ in_array($role, old('roles') ?? []) ? 'selected' : '' }}>
                                                     {{ $role }}
                                                 </option>
                                             @endif
