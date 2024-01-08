@@ -1,3 +1,4 @@
+@php use App\Enums\RoleEnum; @endphp
 @extends('layouts.default')
 
 @section('content')
@@ -61,7 +62,7 @@
                                         class="bi bi-eye"></i> Show</a>
 
                                 @if (in_array('Super Admin', $user->getRoleNames()->toArray() ?? []) )
-                                    @if (Auth::user()->hasRole('Super Admin'))
+                                    @if (Auth::user()->hasRole(RoleEnum::SUPER_ADMIN->label()))
                                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm"><i
                                                 class="bi bi-pencil-square"></i> Edit</a>
                                     @endif

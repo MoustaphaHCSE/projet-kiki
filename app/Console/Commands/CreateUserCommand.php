@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\RoleEnum;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
@@ -41,7 +42,7 @@ class CreateUserCommand extends Command
                 'name' => $name,
                 'email' => $mail . '@gmail.com',
                 'password' => Hash::make('password'),
-            ])->assignRole('saiyan');
+            ])->assignRole(RoleEnum::USER);
             $this->info(sprintf(' Success creating user: %s and his email %s.', $name, $mail));
             $bar->advance();
         }

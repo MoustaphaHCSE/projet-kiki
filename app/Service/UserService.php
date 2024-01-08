@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Actions\CheckUserUpdatableAction;
 use App\Actions\CreateLogAction;
 use App\Actions\HashPasswordAction;
+use App\Enums\Action;
 use App\Models\User;
 use Illuminate\Support\Arr;
 
@@ -54,7 +55,7 @@ class UserService
     {
         app()->call(CheckUserUpdatableAction::class, [
             'user' => $user,
-            'action' => "edit"
+            'action' => Action::EDIT
         ]);
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
@@ -84,7 +85,7 @@ class UserService
     {
         app()->call(CheckUserUpdatableAction::class, [
             'user' => $user,
-            'action' => "destroy"
+            'action' => Action::DESTROY,
         ]);
         $user->syncRoles([]);
         $user->delete();
