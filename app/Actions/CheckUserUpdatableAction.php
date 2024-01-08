@@ -2,11 +2,12 @@
 
 namespace App\Actions;
 
+use App\Models\User;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CheckUserUpdatableAction
 {
-    public function __invoke($user, $action): HttpException
+    public function __invoke(User $user, $action): HttpException
     {
         if ($action == "destroy" && ($user->hasRole('Super Admin') || $user->id == auth()->user()->id)) {
             return abort(403, 'TU PEUX NI TE SUPPRIMER NI SUPPRIMER UN SUPER ADMIN');
