@@ -15,4 +15,10 @@ enum PermissionTo: string
     case EDIT_CELEBRITY = "edit-celebrity";
 
     case DELETE_CELEBRITY = "delete-celebrity";
+
+    case CREATE_ROLE = "create-role";
+
+    case EDIT_ROLE = "edit-role";
+
+    case DELETE_ROLE = "delete-role";
 }
