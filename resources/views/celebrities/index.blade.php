@@ -50,8 +50,10 @@
                                 <td>{{$celebrity->first_name}}</td>
                                 <td>{{$celebrity->description}}</td>
                                 <td>
-                                    <img src="{{$celebrity->image}}" alt="profile pic {{$celebrity->first_name}}"
-                                         height="175px">
+                                    <img src="{{asset('storage/' . $celebrity->image)}}"
+                                         alt="profile pic {{$celebrity->first_name}}"
+                                         class="img-fluid"
+                                    >
                                 </td>
                                 <td>
                                     @foreach ($celebrity->movies as $movie)

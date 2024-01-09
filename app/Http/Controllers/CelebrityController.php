@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateCelebrityRequest;
 use App\Models\Celebrity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\ImageManager;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -30,9 +32,22 @@ class CelebrityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCelebrityRequest $request): RedirectResponse
+    public function store(StoreCelebrityRequest $request, Celebrity $celebrity): RedirectResponse
     {
-        Celebrity::create($request->all());
+        $requestImage = $request->file('image');
+        if ($requestImage !== null && !$requestImage->getError()) {
+            $fileName = pathinfo($request->file('image')->getClientOriginalName())['filename'];
+            $extension = $request->file('image')->guessExtension();
+            $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $fileName)));
+
+            $path = sprintf('%s/celebrity/%s.%s', public_path('storage'), $slug, $extension);
+
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($request->validated('image'));
+
+            $image->toJpeg()->save($path);
+        }
+        $celebrity->create($request->validated());
         return redirect()->route('celebrities.index')
             ->with('success', 'Nouvelle célébrité ajoutée');
     }
@@ -89,4 +104,15 @@ class CelebrityController extends Controller
     {
         return Excel::download(new CelebritiesExport, 'celebrities-list.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
+
+    /**
+     * @param Celebrity $celebrity
+     * @param StoreCelebrityRequest $request
+     * @return array
+     */
+    private function extractData(Celebrity $celebrity, StoreCelebrityRequest $request): void
+    {
+
+    }
+
 }
