@@ -1,3 +1,4 @@
+@php use Support\Facades\Storage; @endphp
 @extends('layouts.default')
 @section('content')
     <div class="row justify-content-center mt-3">
@@ -50,8 +51,10 @@
                                 <td>{{$celebrity->first_name}}</td>
                                 <td>{{$celebrity->description}}</td>
                                 <td>
-                                    <img src="{{$celebrity->image}}" alt="profile pic {{$celebrity->first_name}}"
-                                         height="175px">
+                                    <img src="{{asset('storage/' . $celebrity->image)}}"
+                                         alt="profile pic {{$celebrity->first_name}}"
+                                         class="img-fluid"
+                                    >
                                 </td>
                                 <td>
                                     @foreach ($celebrity->movies as $movie)
