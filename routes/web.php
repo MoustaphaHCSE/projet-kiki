@@ -39,10 +39,10 @@ Route::group([
     ]);
 });
 Route::group(['middleware' => 'auth'], function () {
-    require 'user/user.php';
-    require 'celebrity/celebrity.php';
-    require 'role/role.php';
+    require_once 'user/user.php';
+    require_once 'celebrity/celebrity.php';
+    require_once 'role/role.php';
 });
 
-require 'export/pdf.php';
-require 'export/csv.php';
+require_once 'export/pdf.php';
+require_once 'export/csv.php';

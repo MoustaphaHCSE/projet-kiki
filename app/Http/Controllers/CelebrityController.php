@@ -32,7 +32,7 @@ class CelebrityController extends Controller
      */
     public function store(StoreCelebrityRequest $request): RedirectResponse
     {
-        Celebrity::create($request->all());
+        Celebrity::create($request->validated());
         return redirect()->route('celebrities.index')
             ->with('success', 'Nouvelle célébrité ajoutée');
     }
@@ -70,7 +70,7 @@ class CelebrityController extends Controller
      */
     public function update(UpdateCelebrityRequest $request, Celebrity $celebrity): RedirectResponse
     {
-        $celebrity->update($request->all());
+        $celebrity->update($request->validated());
         return redirect()->back()
             ->with('success', 'Profil wiki mis à jour.');
     }

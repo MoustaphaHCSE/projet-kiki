@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Dto\UserDto;
 use App\Exports\UsersExport;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use App\Service\UserService;
+use App\Services\UserService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
@@ -37,9 +38,20 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $this->userService->store($request->all());
+        $userDto = $this->createUserDto($request);
+        $this->userService->store($userDto);
         return redirect()->route('users.index')
             ->with('success', 'Nouvel utilisateur ajouté.');
+    }
+
+    public function createUserDto(UpdateUserRequest|StoreUserRequest $request): UserDto
+    {
+        return new UserDto(
+            name: $request->validated('name'),
+            email: $request->validated('email'),
+            password: $request->validated('password'),
+            roles: $request->validated('roles'),
+        );
     }
 
     /**
@@ -82,7 +94,8 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $this->userService->update($request->all(), $user);
+        $userDto = $this->createUserDto($request);
+        $this->userService->update($userDto, $user);
         return redirect()->route('users.index')
             ->with('success', 'User is updated successfully.');
     }
@@ -111,7 +124,6 @@ class UserController extends Controller
         $users = User::latest('id')->paginate(20);
         $pdf = Pdf::loadView('users.index', array('users' => $users))
             ->setPaper('a4');
-
         return $pdf->download('users-export.pdf');
     }
 

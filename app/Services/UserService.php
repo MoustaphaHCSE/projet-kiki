@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Service;
+namespace App\Services;
 
 use App\Actions\CheckUserUpdatableAction;
 use App\Actions\CreateLogAction;
 use App\Actions\HashPasswordAction;
+use App\Dto\DtoArrayBuilder;
+use App\Dto\UserDto;
 use App\Enums\Action;
 use App\Models\User;
 use Illuminate\Support\Arr;
@@ -19,13 +21,14 @@ class UserService
         ]);
     }
 
-    public function store($data): User
+    public function store($userData): User
     {
-        $data['password'] = app()->call(HashPasswordAction::class, [
-            'password' => $data['password']
+        $userData = DtoArrayBuilder::toArray($userData, true);
+        $userData['password'] = app()->call(HashPasswordAction::class, [
+            'password' => $userData['password']
         ]);
-        $user = User::create($data);
-        $user->assignRole($data['roles']);
+        $user = User::create($userData);
+        $user->assignRole($userData['roles']);
 
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
@@ -63,14 +66,17 @@ class UserService
         ]);
     }
 
-    public function update(array $userData, User $user): User
+    public function update(UserDto $userData, User $user): User
     {
-        if (!empty($request->password)) {
+        $userData = DtoArrayBuilder::toArray($userData, true);
+        if (!empty($userData['password'])) {
             $userData['password'] = app()->call(HashPasswordAction::class, [
                 'password' => $userData['password']
             ]);
+            $user->update($userData);
+        } else {
+            $userData = Arr::except($userData, 'password');
         }
-        $userData = Arr::except($userData, 'password');
         $user->update($userData);
         $user->syncRoles($userData['roles']);
 
