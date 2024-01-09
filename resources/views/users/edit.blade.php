@@ -1,4 +1,7 @@
+@php use App\Enums\RoleEnum; @endphp
 @extends('layouts.default')
+
+@section('title', 'Edit user')
 
 @section('content')
     <div class="row justify-content-center">
@@ -69,12 +72,14 @@
                                     @forelse ($roles as $role)
 
                                         @if ($role!='Super Admin')
-                                            <option value="{{ $role }}" {{ in_array($role, $userRoles ?? []) ? 'selected' : '' }}>
+                                            <option
+                                                value="{{ $role }}" {{ in_array($role, $userRoles ?? []) ? 'selected' : '' }}>
                                                 {{ $role }}
                                             </option>
                                         @else
-                                            @if (Auth::user()->hasRole(\App\Enums\RoleEnum::SUPER_ADMIN->label()))
-                                                <option value="{{ $role }}" {{ in_array($role, $userRoles ?? []) ? 'selected' : '' }}>
+                                            @if (Auth::user()->hasRole(RoleEnum::SUPER_ADMIN->label()))
+                                                <option
+                                                    value="{{ $role }}" {{ in_array($role, $userRoles ?? []) ? 'selected' : '' }}>
                                                     {{ $role }}
                                                 </option>
                                             @endif
