@@ -38,10 +38,20 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-
-        $this->userService->store($request->validated());
+        $userDto = $this->createUserDto($request);
+        $this->userService->store($userDto);
         return redirect()->route('users.index')
             ->with('success', 'Nouvel utilisateur ajouté.');
+    }
+
+    public function createUserDto(UpdateUserRequest|StoreUserRequest $request): UserDto
+    {
+        return new UserDto(
+            name: $request->validated('name'),
+            email: $request->validated('email'),
+            password: $request->validated('password'),
+            roles: $request->validated('roles'),
+        );
     }
 
     /**
@@ -84,12 +94,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $userDto = new UserDto(
-            name: $request->validated('name'),
-            email: $request->validated('email'),
-            password: $request->validated('password'),
-            roles: $request->validated('roles'),
-        );
+        $userDto = $this->createUserDto($request);
         $this->userService->update($userDto, $user);
         return redirect()->route('users.index')
             ->with('success', 'User is updated successfully.');

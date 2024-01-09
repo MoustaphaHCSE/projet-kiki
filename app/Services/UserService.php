@@ -21,13 +21,14 @@ class UserService
         ]);
     }
 
-    public function store($data): User
+    public function store($userData): User
     {
-        $data['password'] = app()->call(HashPasswordAction::class, [
-            'password' => $data['password']
+        $userData = DtoArrayBuilder::toArray($userData, true);
+        $userData['password'] = app()->call(HashPasswordAction::class, [
+            'password' => $userData['password']
         ]);
-        $user = User::create($data);
-        $user->assignRole($data['roles']);
+        $user = User::create($userData);
+        $user->assignRole($userData['roles']);
 
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
