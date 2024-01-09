@@ -1,4 +1,3 @@
-@php use Illuminate\Support\Facades\Auth; @endphp
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">Home</a>
@@ -24,7 +23,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#" tabindex="-1"
-                           aria-disabled="true">{{Auth::user()->name}}</a>
+                           aria-disabled="true">{{auth()->user()->name}}</a>
                     </li>
                     <li>
                         <form class="nav-item" action="{{route('auth.logout')}}" method="post">

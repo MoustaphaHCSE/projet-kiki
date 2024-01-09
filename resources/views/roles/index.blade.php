@@ -1,11 +1,14 @@
 @extends('layouts.default')
+
+@section('title', 'All Roles')
+
 @section('content')
     <div class="card">
         <div class="card-header">Gérer les roles</div>
         <div class="card-body">
             @can('create-role')
                 <a href="{{ route('roles.create') }}" class="btn btn-success btn-sm my-2"><i
-                            class="bi bi-plus-circle"></i> Ajouter un rôle</a>
+                        class="bi bi-plus-circle"></i> Ajouter un rôle</a>
             @endcan
             <table class="table table-striped table-bordered">
                 <thead>
@@ -26,19 +29,19 @@
                                 @method('DELETE')
 
                                 <a href="{{ route('roles.show', $role->id) }}" class="btn btn-warning btn-sm"><i
-                                            class="bi bi-eye"></i> Show</a>
+                                        class="bi bi-eye"></i> Show</a>
 
                                 @if ($role->name!='Super Admin')
                                     @can('edit-role')
                                         <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-primary btn-sm"><i
-                                                    class="bi bi-pencil-square"></i> Edit</a>
+                                                class="bi bi-pencil-square"></i> Edit</a>
                                     @endcan
 
                                     @can('delete-role')
                                         @if ($role->name!=Auth::user()->hasRole($role->name))
                                             <button type="submit" class="btn btn-danger btn-sm"
                                                     onclick="return confirm('Do you want to delete this role?');"><i
-                                                        class="bi bi-trash"></i> Delete
+                                                    class="bi bi-trash"></i> Delete
                                             </button>
                                         @endif
                                     @endcan

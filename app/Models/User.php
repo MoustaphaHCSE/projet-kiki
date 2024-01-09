@@ -63,9 +63,6 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'id' => 'integer',
-        'name' => 'string',
-        'email' => 'string',
         'password' => 'hashed',
         'email_verified_at' => 'datetime',
         'role' => Role::class,

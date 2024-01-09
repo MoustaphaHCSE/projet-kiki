@@ -1,5 +1,7 @@
 @extends('layouts.default')
 
+@section('title', 'Create Role')
+
 @section('content')
 
     <div class="row justify-content-center">
@@ -37,7 +39,8 @@
                                         aria-label="Permissions" id="permissions" name="permissions[]"
                                         style="height: 210px;">
                                     @forelse ($permissions as $permission)
-                                        <option value="{{ $permission->id }}" {{ in_array($permission->id, old('permissions') ?? []) ? 'selected' : '' }}>
+                                        <option
+                                            value="{{ $permission->id }}" {{ in_array($permission->id, old('permissions') ?? []) ? 'selected' : '' }}>
                                             {{ $permission->name }}
                                         </option>
                                     @empty

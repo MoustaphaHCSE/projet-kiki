@@ -15,7 +15,8 @@ class UserService
     {
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => 'displaying all users',
+            'message' => "display",
+            'target' => "all users",
         ]);
     }
 
@@ -29,7 +30,8 @@ class UserService
 
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => 'Adding a new user',
+            'message' => "add",
+            'target' => "new user",
         ]);
         return $user;
     }
@@ -38,7 +40,8 @@ class UserService
     {
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => 'Creating a new user',
+            'message' => "create",
+            'target' => "",
         ]);
     }
 
@@ -46,7 +49,8 @@ class UserService
     {
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => sprintf('Showing user: %s \'s profile', $user->id),
+            'message' => "show",
+            'target' => $user->id,
         ]);
 
     }
@@ -59,7 +63,8 @@ class UserService
         ]);
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => sprintf('User: %s\'s profile is being edited', $user->id),
+            'message' => "edit",
+            'target' => $user->id,
         ]);
     }
 
@@ -76,7 +81,8 @@ class UserService
 
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => sprintf('Update on user: %s', $user->id),
+            'message' => "update",
+            'target' => $user->id,
         ]);
         return $user;
     }
@@ -91,7 +97,8 @@ class UserService
         $user->delete();
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => sprintf('Delete user: %s', $user->id),
+            'message' => "delete",
+            'target' => $user->id,
         ]);
         return $user;
     }
