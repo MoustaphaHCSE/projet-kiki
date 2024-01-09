@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Movie;
+use Database\Factories\MovieFactory;
 use Illuminate\Database\Seeder;
 
 class MovieSeeder extends Seeder
@@ -12,6 +12,8 @@ class MovieSeeder extends Seeder
      */
     public function run(): void
     {
-        Movie::factory(10)->create();
+        MovieFactory::new()
+            ->withPrefix()
+            ->createOne();
     }
 }
