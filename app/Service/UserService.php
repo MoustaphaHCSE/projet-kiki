@@ -6,6 +6,7 @@ use App\Actions\CheckUserUpdatableAction;
 use App\Actions\CreateLogAction;
 use App\Actions\HashPasswordAction;
 use App\Enums\Action;
+use App\Enums\UserStatus;
 use App\Models\User;
 use Illuminate\Support\Arr;
 
@@ -57,10 +58,13 @@ class UserService
 
     public function edit(User $user): void
     {
-        app()->call(CheckUserUpdatableAction::class, [
+        $status = app()->call(CheckUserUpdatableAction::class, [
             'user' => $user,
-            'action' => Action::EDIT
+            'action' => Action::EDIT,
         ]);
+        if ($status == UserStatus::NotUpdatable) {
+            abort(403, 'UN SUPER ADMIN NE PEUT EN MODIFIER UN AUTRE');
+        }
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
             'message' => "edit",
@@ -89,10 +93,13 @@ class UserService
 
     public function destroy(User $user): User
     {
-        app()->call(CheckUserUpdatableAction::class, [
+        $status = app()->call(CheckUserUpdatableAction::class, [
             'user' => $user,
             'action' => Action::DESTROY,
         ]);
+        if ($status == UserStatus::NotDeletable) {
+            abort(403, 'TU NE PEUX PAS SUPPRIMER UN SUPER ADMIN');
+        }
         $user->syncRoles([]);
         $user->delete();
         app()->call(CreateLogAction::class, [
