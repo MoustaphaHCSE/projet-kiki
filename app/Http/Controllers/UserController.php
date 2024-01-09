@@ -10,7 +10,6 @@ use App\Service\UserService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
@@ -20,11 +19,6 @@ class UserController extends Controller
 {
     public function __construct(private readonly UserService $userService)
     {
-        $this->middleware('auth');
-        $this->middleware('permission:create-user|edit-user|delete-user', ['only' => ['index', 'show']]);
-        $this->middleware('permission:create-user', ['only' => ['create', 'store']]);
-        $this->middleware('permission:edit-user', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:delete-user', ['only' => ['destroy']]);
     }
 
     /**
@@ -32,10 +26,9 @@ class UserController extends Controller
      */
     public function index(): View
     {
-        Log::channel('user-crud')->info('displaying all users');
-
+        $this->userService->displayUsers();
         return view('users.index', [
-            'users' => User::latest('id')->paginate(3)
+            'users' => User::latest('id')->paginate(4)
         ]);
     }
 
@@ -45,10 +38,8 @@ class UserController extends Controller
     public function store(StoreUserRequest $request): RedirectResponse
     {
         $this->userService->store($request->all());
-        Log::channel('user-crud')->info('Adding a new user');
-
         return redirect()->route('users.index')
-            ->with('success', 'New user is added successfully.');
+            ->with('success', 'Nouvel utilisateur ajouté.');
     }
 
     /**
@@ -56,7 +47,7 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        Log::channel('user-crud')->info('Creating a User');
+        $this->userService->create();
         return view('users.create', [
             'roles' => Role::pluck('name')->all()
         ]);
@@ -67,7 +58,7 @@ class UserController extends Controller
      */
     public function show(User $user): View
     {
-        Log::channel('user-crud')->info(sprintf('Showing user: %s \'s profile', $user->id));
+        $this->userService->show($user);
         return view('users.show', [
             'user' => $user
         ]);
@@ -79,8 +70,6 @@ class UserController extends Controller
     public function edit(User $user): View
     {
         $this->userService->edit($user);
-
-        Log::channel('user-crud')->info(sprintf('User: %s\'s profile is being edited', $user->id));
         return view('users.edit', [
             'user' => $user,
             'roles' => Role::pluck('name')->all(),
@@ -94,9 +83,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
         $this->userService->update($request->all(), $user);
-
-        Log::channel('user-crud')->info(sprintf('Update on user: %s', $user->id));
-        return redirect()->back()
+        return redirect()->route('users.index')
             ->with('success', 'User is updated successfully.');
     }
 
@@ -106,13 +93,11 @@ class UserController extends Controller
     public function destroy(User $user): RedirectResponse
     {
         $this->userService->destroy($user);
-
-        Log::channel('user-crud')->info(sprintf('Delete user: %s', $user->id));
         return redirect()->route('users.index')
             ->with('success', 'User is deleted successfully.');
     }
 
-    public function viewPDF()
+    public function viewPDF(): Response
     {
         $users = User::latest('id')->paginate(20);
         $pdf = Pdf::loadView('users.index', array('users' => $users))
@@ -133,6 +118,5 @@ class UserController extends Controller
     public function exportCSV(): BinaryFileResponse
     {
         return Excel::download(new UsersExport, 'users-list.xlsx', \Maatwebsite\Excel\Excel::XLSX);
-//        return Excel::download(new UsersDataExport, 'users-data.xlsx');
     }
 }

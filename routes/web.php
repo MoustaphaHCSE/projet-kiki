@@ -28,19 +28,21 @@ Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::delete('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::post('/login', [AuthController::class, 'doLogin']);
 
-Route::prefix('admin')->group(function () {
-    Route::group(['middleware' => 'auth'], function () {
-        Route::resources([
-            'roles' => RoleController::class,
-            'users' => UserController::class,
-            'celebrities' => CelebrityController::class
-        ]);
-    });
+Route::group([
+    'prefix' => 'admin',
+    'middleware' => 'auth',
+], function () {
+    Route::resources([
+        'roles' => RoleController::class,
+        'users' => UserController::class,
+        'celebrities' => CelebrityController::class
+    ]);
+});
+Route::group(['middleware' => 'auth'], function () {
+    require 'user/user.php';
+    require 'celebrity/celebrity.php';
+    require 'role/role.php';
 });
 
-// EXPORT PDF
-Route::post('users/view-pdf', [UserController::class, 'viewPDF'])->name('view-pdf');
-Route::post('users/download-pdf', [UserController::class, 'downloadPDF'])->name('download-pdf');
-
-// EXPORT EXCEL
-Route::post('users/export-csv', [UserController::class, 'exportCSV'])->name('export-csv');
+require 'export/pdf.php';
+require 'export/csv.php';

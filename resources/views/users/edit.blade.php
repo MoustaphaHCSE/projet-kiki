@@ -73,7 +73,7 @@
                                                 {{ $role }}
                                             </option>
                                         @else
-                                            @if (Auth::user()->hasRole('Super Admin'))
+                                            @if (Auth::user()->hasRole(\App\Enums\RoleEnum::SUPER_ADMIN->label()))
                                                 <option value="{{ $role }}" {{ in_array($role, $userRoles ?? []) ? 'selected' : '' }}>
                                                     {{ $role }}
                                                 </option>

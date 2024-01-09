@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CelebritiesExport;
 use App\Http\Requests\StoreCelebrityRequest;
 use App\Http\Requests\UpdateCelebrityRequest;
 use App\Models\Celebrity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CelebrityController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('permission:create-product|edit-product|delete-product', ['only' => ['index', 'show']]);
-        $this->middleware('permission:create-product', ['only' => ['create', 'store']]);
-        $this->middleware('permission:edit-product', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:delete-product', ['only' => ['destroy']]);
     }
 
     /**
@@ -85,5 +83,10 @@ class CelebrityController extends Controller
         $celebrity->delete();
         return redirect()->route('celebrities.index')
             ->with('success', 'La célébrité n\'a plus aucune notoriété..');
+    }
+
+    public function exportCSV(): BinaryFileResponse
+    {
+        return Excel::download(new CelebritiesExport, 'celebrities-list.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 }
