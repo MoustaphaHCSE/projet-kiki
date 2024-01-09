@@ -124,7 +124,6 @@ class UserController extends Controller
         $users = User::latest('id')->paginate(20);
         $pdf = Pdf::loadView('users.index', array('users' => $users))
             ->setPaper('a4');
-//    refacto une méthode pour le pdf (view/dl)
         return $pdf->download('users-export.pdf');
     }
 

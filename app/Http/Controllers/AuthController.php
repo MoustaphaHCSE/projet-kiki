@@ -9,7 +9,6 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    //
     public function login(): View
     {
         if (Auth::user()) {
@@ -20,11 +19,9 @@ class AuthController extends Controller
 
     public function doLogin(LoginRequest $request)
     {
-        // array with the form's validated fields
         $credentials = $request->validated();
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            // intended : initial route where the user came from before loggin in
             return redirect()->intended(route('celebrities.index'));
         }
 

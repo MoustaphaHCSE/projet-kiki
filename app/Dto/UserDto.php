@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Dto;
-
-// this file is unused, but i'll keep it if i need to create manually a DTO one day '.'
 final class UserDto extends Dto
 {
     /**

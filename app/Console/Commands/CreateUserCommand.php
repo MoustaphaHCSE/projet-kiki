@@ -33,9 +33,6 @@ class CreateUserCommand extends Command
         $bar = $this->output->createProgressBar($count);
         $bar->start();
         for ($i = 1; $i <= $count; $i++) {
-//            $name = $this->argument('name');
-//            $email = $this->argument('email');
-//            $password = $this->argument('password') ?? Hash::make('password');
             $name = fake()->name();
             $mail = preg_replace('/[^a-z]/', '', strtolower($name));
             User::create([
