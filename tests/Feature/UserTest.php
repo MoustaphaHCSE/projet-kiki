@@ -7,9 +7,15 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class CelebrityTest extends TestCase
+class UserTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_user_is_redirected_if_not_logged_in(): void
+    {
+        $response = $this->get('/admin/celebrities');
+        $response->assertRedirect('login');
+    }
 
     public function test_user_cannot_access_non_existent_celebrity_with_session(): void
     {
