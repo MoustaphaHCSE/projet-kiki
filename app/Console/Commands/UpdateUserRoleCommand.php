@@ -27,7 +27,7 @@ class UpdateUserRoleCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $id = $this->option('id');
         $role = $this->option('role');

@@ -21,4 +21,9 @@ class MovieFactory extends Factory
             'title' => $this->faker->name(),
         ];
     }
+
+    public function withPrefix(): MovieFactory
+    {
+        return $this->state(["title" => "movie " . $this->faker->name()]);
+    }
 }
