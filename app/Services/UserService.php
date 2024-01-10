@@ -21,7 +21,7 @@ class UserService
         ]);
     }
 
-    public function store($userData): User
+    public function store(UserDto $userData): User
     {
         $userData = DtoArrayBuilder::toArray($userData, true);
         $userData['password'] = app()->call(HashPasswordAction::class, [
