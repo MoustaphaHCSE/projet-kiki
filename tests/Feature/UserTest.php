@@ -4,12 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\Celebrity;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-    use RefreshDatabase;
 
     public function test_user_is_redirected_if_not_logged_in(): void
     {
