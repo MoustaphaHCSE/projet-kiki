@@ -2,8 +2,11 @@
 
 namespace App\Service;
 
+use App\Actions\CheckUserUpdatableAction;
 use App\Actions\CreateLogAction;
 use App\Actions\HashPasswordAction;
+use App\Enums\Action;
+use App\Enums\UserStatus;
 use App\Models\User;
 use Illuminate\Support\Arr;
 
@@ -13,7 +16,8 @@ class UserService
     {
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => 'displaying all users',
+            'message' => "display",
+            'target' => "all users",
         ]);
     }
 
@@ -27,7 +31,8 @@ class UserService
 
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => 'Adding a new user',
+            'message' => "add",
+            'target' => "new user",
         ]);
         return $user;
     }
@@ -36,7 +41,8 @@ class UserService
     {
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => 'Creating a new user',
+            'message' => "create",
+            'target' => "",
         ]);
     }
 
@@ -44,22 +50,25 @@ class UserService
     {
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => sprintf('Showing user: %s \'s profile', $user->id),
+            'message' => "show",
+            'target' => $user->id,
         ]);
 
     }
 
     public function edit(User $user): void
     {
-        // Assure that only Super Admin can update his own Profile
-        if ($user->hasRole('Super Admin')) {
-            if ($user->id != auth()->user()->id) {
-                abort(403, 'A SUPER ADMIN CAN\'T UPDATE ANOTHER SUPER ADMIN');
-            }
+        $status = app()->call(CheckUserUpdatableAction::class, [
+            'user' => $user,
+            'action' => Action::EDIT,
+        ]);
+        if ($status == UserStatus::NotUpdatable) {
+            abort(403, 'UN SUPER ADMIN NE PEUT EN MODIFIER UN AUTRE');
         }
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => sprintf('User: %s\'s profile is being edited', $user->id),
+            'message' => "edit",
+            'target' => $user->id,
         ]);
     }
 
@@ -76,18 +85,27 @@ class UserService
 
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => sprintf('Update on user: %s', $user->id),
+            'message' => "update",
+            'target' => $user->id,
         ]);
         return $user;
     }
 
     public function destroy(User $user): User
     {
+        $status = app()->call(CheckUserUpdatableAction::class, [
+            'user' => $user,
+            'action' => Action::DESTROY,
+        ]);
+        if ($status == UserStatus::NotDeletable) {
+            abort(403, 'TU NE PEUX PAS SUPPRIMER UN SUPER ADMIN');
+        }
         $user->syncRoles([]);
         $user->delete();
         app()->call(CreateLogAction::class, [
             'route' => 'user-crud',
-            'message' => sprintf('Delete user: %s', $user->id),
+            'message' => "delete",
+            'target' => $user->id,
         ]);
         return $user;
     }

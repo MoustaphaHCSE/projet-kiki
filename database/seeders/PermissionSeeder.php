@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\PermissionTo;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 
@@ -13,15 +14,15 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-            'create-role',
-            'edit-role',
-            'delete-role',
-            'create-user',
-            'edit-user',
-            'delete-user',
-            'create-celebrity',
-            'edit-celebrity',
-            'delete-celebrity',
+            PermissionTo::CREATE_ROLE,
+            PermissionTo::EDIT_ROLE,
+            PermissionTo::DELETE_ROLE,
+            PermissionTo::CREATE_USER,
+            PermissionTo::EDIT_USER,
+            PermissionTo::DELETE_USER,
+            PermissionTo::CREATE_CELEBRITY,
+            PermissionTo::EDIT_CELEBRITY,
+            PermissionTo::DELETE_CELEBRITY,
         ];
 
         // Looping and Inserting Array's Permissions into Permission Table

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RoleEnum;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +20,7 @@ class SuperAdminSeeder extends Seeder
             'email' => 'carter@admin.com',
             'password' => Hash::make('carter')
         ]);
-        $superAdmin->assignRole('Super Admin');
+        $superAdmin->assignRole(RoleEnum::SUPER_ADMIN);
 
 
         // Creating Admin User
@@ -28,7 +29,7 @@ class SuperAdminSeeder extends Seeder
             'email' => 'florent@helloce.fr',
             'password' => Hash::make('florent')
         ]);
-        $admin->assignRole('Admin');
+        $admin->assignRole(RoleEnum::ADMIN);
 
         // Creating Celebrity Manager User
         $celebrityManager = User::create([
@@ -36,6 +37,14 @@ class SuperAdminSeeder extends Seeder
             'email' => 'dr@dre.fr',
             'password' => Hash::make('drdre')
         ]);
-        $celebrityManager->assignRole('Celebrity Manager');
+        $celebrityManager->assignRole(RoleEnum::CELEBRITY_MANAGER);
+
+        // Creating User
+        $user = User::create([
+            'name' => 'Mr banal',
+            'email' => 'mr@banal.fr',
+            'password' => Hash::make('mrbanal'),
+        ]);
+        $user->assignRole(RoleEnum::USER);
     }
 }

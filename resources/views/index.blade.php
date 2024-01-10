@@ -1,4 +1,7 @@
 @extends('layouts.default')
+
+@section('title', 'Home')
+
 @section('content')
     <h1>Welcome to Projet Kiki</h1>
     <img

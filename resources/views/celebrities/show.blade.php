@@ -1,4 +1,7 @@
 @extends('layouts.default')
+
+@section('title', 'Celeb profile')
+
 @section('content')
     <div class="row justify-content-center mt-3">
         <div class="col-md-8">

@@ -1,19 +1,18 @@
 @extends('layouts.default')
+
+@section('title', 'Studio')
+
 @section('content')
     <div class="row justify-content-center mt-3">
         <div class="col-md-12">
-            @if ($message = Session::get('success'))
-                <div class="alert alert-success" role="alert">
-                    {{$message}}
-                </div>
-            @endif
+            @include('includes.success')
             <div class="card">
                 <div class="card-header">Liste des célébrités</div>
                 <div class="card-body">
 
                     <div class="btn-group gap-3 mb-3">
                         <a href="{{ route('celebrities.create') }}" class="btn btn-success"><i
-                                    class="bi bi-plus-circle"></i> Ajouter nouvelle célébrité</a>
+                                class="bi bi-plus-circle"></i> Ajouter nouvelle célébrité</a>
                         <form action="{{route('export-celebrities-csv')}} " method="post" target="_blank">
                             @csrf
                             <button type="submit" class="btn btn-info">Export CSV</button>
@@ -64,13 +63,13 @@
                                         @method('DELETE')
                                         <a href="{{ route('celebrities.show', $celebrity->id) }}"
                                            class="btn btn-warning btn-sm"><i
-                                                    class="bi bi-eye"></i> Show</a>
+                                                class="bi bi-eye"></i> Show</a>
                                         <a href="{{ route('celebrities.edit', $celebrity->id) }}"
                                            class="btn btn-primary btn-sm"><i
-                                                    class="bi bi-pencil-square"></i> Edit</a>
+                                                class="bi bi-pencil-square"></i> Edit</a>
                                         <button type="submit" class="btn btn-danger btn-sm"
                                                 onclick="return confirm('Do you want to delete this celebrity?');"><i
-                                                    class="bi bi-trash"></i> Delete
+                                                class="bi bi-trash"></i> Delete
                                         </button>
                                     </form>
                                 </td>

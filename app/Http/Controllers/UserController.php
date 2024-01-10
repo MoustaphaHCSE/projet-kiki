@@ -92,10 +92,6 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
-        // Check if user is Super Admin or deleted user is auth'ed user
-        if ($user->hasRole('Super Admin') || $user->id == auth()->user()->id) {
-            abort(403, 'CAN\'T DELETE THIS USER (it\'s either you or an admin');
-        }
         $this->userService->destroy($user);
         return redirect()->route('users.index')
             ->with('success', 'User is deleted successfully.');

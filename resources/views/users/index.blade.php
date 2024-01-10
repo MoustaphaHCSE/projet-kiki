@@ -1,16 +1,13 @@
 @extends('layouts.default')
 
+@section('title', 'Users')
+
 @section('content')
 
     <div class="card">
         <div class="card-header">Panneau Admin - utilisateurs</div>
-        @if ($message = Session::get('success'))
-            <div class="alert alert-success" role="alert">
-                {{$message}}
-            </div>
-        @endif
         <div class="card-body">
-
+            @include('includes.success')
             <div class="btn-group mb-3 gap-3" role="group">
                 @can('create-user')
                     <a href="{{ route('users.create') }}" class="btn btn-success"><i
@@ -61,7 +58,7 @@
                                         class="bi bi-eye"></i> Show</a>
 
                                 @if (in_array('Super Admin', $user->getRoleNames()->toArray() ?? []) )
-                                    @if (Auth::user()->hasRole('Super Admin'))
+                                    @if (Auth::user()->hasRole(App\Enums\RoleEnum::SUPER_ADMIN->label()))
                                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm"><i
                                                 class="bi bi-pencil-square"></i> Edit</a>
                                     @endif
