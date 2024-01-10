@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
 
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\Date;
  */
 class Movie extends Model
 {
+    use HasFactory;
+
     public function celebrities()
     {
         return $this->belongsToMany(Celebrity::class);

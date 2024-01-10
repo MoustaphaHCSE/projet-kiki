@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Celebrity;
 use App\Models\Movie;
+use Database\Factories\CelebrityFactory;
 use Illuminate\Database\Seeder;
 
 class CelebritySeeder extends Seeder
@@ -13,7 +13,7 @@ class CelebritySeeder extends Seeder
      */
     public function run(): void
     {
-        Celebrity::factory()
+        CelebrityFactory::new()
             ->has(Movie::factory())
             ->count(10)
             ->create();
